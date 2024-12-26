@@ -1,6 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Reflection;
 
 namespace DotForge.ViewModels
 {
@@ -24,12 +26,9 @@ namespace DotForge.ViewModels
 
         // ListBox 用データ
         [ObservableProperty]
-        private ObservableCollection<string> templates = new()
-        {
-            "Template1", "Template2", "Template3"
-        };
+        private ObservableCollection<string> templates = new();
 
-        // ListBox の選択アイテム
+        // ComboBox の選択アイテム
         [ObservableProperty]
         private string selectedTemplate = string.Empty;
 
@@ -74,9 +73,19 @@ namespace DotForge.ViewModels
             // 例: ファイル生成・コンパイルなど
         }
 
+
+        private List<TemplateInfoItem> _TemplateInfoList = new();
         public MainViewModel()
         {
             // コンストラクタで初期値等を設定
+            // 実行中のアセンブリの場所を取得
+            string templateDirectory = TemplateHelper.GetTemplateDirectory();
+            _TemplateInfoList = TemplateHelper.GetTempleteInfoList(templateDirectory);
+            templates.Clear();
+            foreach (var item in _TemplateInfoList)
+            {
+                templates.Add(item.TemplateName);
+            }
         }
     }
 }

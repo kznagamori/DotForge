@@ -69,7 +69,7 @@
                    Content="テンプレート："
                    Margin="4" VerticalAlignment="Center"
                    IsEnabled="{Binding IsTemplateRowEnabled}"/>
-            <ListBox Grid.Row="0" Grid.Column="1"
+            <ComboBox Grid.Row="0" Grid.Column="1"
                      Height="22"
                      Margin="4"
                      ItemsSource="{Binding Templates}"
