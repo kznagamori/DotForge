@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 
 namespace ___PROJECTNAME___;
-public partial class __ClassName__
+public partial class ___CLASSNAME___
 {
     public ___CLASSNAME___()
     {
-        InitializeComponent();
     }
 }
 
