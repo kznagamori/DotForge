@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <ApplicationIcon>Assets/DotForge.ico</ApplicationIcon>
     </PropertyGroup>
 
     <!-- ビルドの高速化 -->
@@ -31,5 +32,10 @@
     <ItemGroup>
         <None Include="template\**\*" CopyToOutputDirectory="PreserveNewest" />
         <None Include="template\**\*" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <!-- アイコンの設定 -->
+    <ItemGroup>
+        <Resource Include="Assets/DotForge.ico" />
     </ItemGroup>
 </Project>

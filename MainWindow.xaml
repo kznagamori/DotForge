@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:DotForge"
         xmlns:vm="clr-namespace:DotForge.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="600"
-        ResizeMode="NoResize">
+        Title="DotForge" Height="300" Width="600"
+        ResizeMode="NoResize"
+        Icon="Assets/DotForge.ico">
 
     <!--
       ▼ 方法1: XAML上で Window.DataContext に直接 ViewModel を指定する方法
