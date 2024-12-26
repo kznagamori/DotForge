@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DotForge"
         xmlns:vm="clr-namespace:DotForge.ViewModels"
         mc:Ignorable="d"
-        Title="DotForge" Height="300" Width="600"
+        Title="DotForge" Height="320" Width="600"
         ResizeMode="NoResize"
         Icon="Assets/DotForge.ico">
 
@@ -132,10 +132,10 @@
                     IsEnabled="{Binding IsOutputDirRowEnabled}"/>
 
             <!-- 6行目: 出力ボタン（右寄せ） -->
-            <Button Grid.Row="5" Grid.Column="2"
+            <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
                     Content="出力"
                     HorizontalAlignment="Right"
-                    Padding="20,5"
+                    Padding="40,10" Margin="4"
                     Command="{Binding GenerateOutputCommand}"
                     IsEnabled="{Binding IsOutputEnabled}"/>
         </Grid>
