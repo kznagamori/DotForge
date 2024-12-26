@@ -22,6 +22,10 @@
 			"editor.tabSize": 2,
 			"editor.insertSpaces": true
 		},
+		"[code-workspace]": {
+			"editor.tabSize": 4,
+			"editor.insertSpaces": false
+		},
 		"files.encoding": "utf8",
 		"extensions.ignoreRecommendations": true
 	}
