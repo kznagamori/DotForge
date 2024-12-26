@@ -43,7 +43,7 @@
 
         <!-- ステータスバー -->
         <StatusBar DockPanel.Dock="Bottom">
-            <TextBlock Text="ステータスバー: 準備完了" />
+            <TextBlock Text="{Binding StatusText, Mode=OneWay}"/>
         </StatusBar>
 
         <!-- コンテンツエリア -->
@@ -135,7 +135,8 @@
                     Content="出力"
                     HorizontalAlignment="Right"
                     Padding="20,5"
-                    Command="{Binding GenerateOutputCommand}"/>
+                    Command="{Binding GenerateOutputCommand}"
+                    IsEnabled="{Binding IsOutputEnabled}"/>
         </Grid>
     </DockPanel>
 </Window>

@@ -10,7 +10,7 @@ public class TemplateInfoItem
     public string DirectoryName { get; set; } = string.Empty; // ディレクトリ名
     public string TemplateName { get; set; } = string.Empty;// テンプレート名
 
-    public bool IsProjectTemplate => DirectoryName.StartsWith("Project.");
+    public bool IsProjectTemplate { get; set; } = false; // プロジェクトテンプレートかどうか
 }
 
 public class TemplateHelper
@@ -29,18 +29,21 @@ public class TemplateHelper
             {
                 string originalName = Path.GetFileName(directory); // 元のディレクトリ名
                 string modifiedName = originalName;
-
+                bool isProjectTemplate = false;
                 // "Project." を削除
                 if (originalName.StartsWith("Project."))
                 {
                     modifiedName = originalName.Substring("Project.".Length);
+                    isProjectTemplate = true;
                 }
-
+                //originalNameからフルパスを作成する
+                string fullPath = Path.Combine(templateDirectory, originalName);
                 // リストに追加
                 directoryList.Add(new TemplateInfoItem
                 {
-                    DirectoryName = originalName,
-                    TemplateName = modifiedName
+                    DirectoryName = fullPath,
+                    TemplateName = modifiedName,
+                    IsProjectTemplate = isProjectTemplate
                 });
             }
         }
