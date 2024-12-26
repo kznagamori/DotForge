@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace __ProjectName__
+namespace ___PROJECTNAME___;
 
 /// <summary>
 /// Interaction logic for App.xaml

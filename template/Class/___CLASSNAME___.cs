@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace __ProjectName__;
+namespace ___PROJECTNAME___;
 public partial class __ClassName__
 {
-    public __ClassName__()
+    public ___CLASSNAME___()
     {
         InitializeComponent();
     }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms.Integration;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Text;
 
 namespace DotForge.ViewModels
 {
@@ -188,10 +189,10 @@ namespace DotForge.ViewModels
             DirectoryCopyHelper.CopyDirectory(templateDirectory, OutputDirectory, true);
 
             // 出力先ディレクトリをサブディレクトリを含めて再帰的に取得
-            // ファイル名の一部にに__ProjectName__が含まれるファイルを検索して置換
-            // __ProjectName__はProjectNameに置き換える
-            // ファイル名の一部にに__ClassName__が含まれるファイルを検索して置換
-            // __ClassName__はClassNameに置き換える
+            // ファイル名の一部にに___PROJECTNAME___が含まれるファイルを検索して置換
+            // ___PROJECTNAME___はProjectNameに置き換える
+            // ファイル名の一部にに___CLASSNAME___が含まれるファイルを検索して置換
+            // ___CLASSNAME___はClassNameに置き換える
             // 再帰的にサブディレクトリを含めて検索
             var allFiles = Directory.GetFiles(OutputDirectory, "*", SearchOption.AllDirectories);
 
@@ -201,15 +202,15 @@ namespace DotForge.ViewModels
                 string directory = Path.GetDirectoryName(filePath)!; // 親ディレクトリ取得
                 string newFileName = fileName;
                 // ファイル名の置換処理
-                if (fileName.Contains("__ProjectName__"))
+                if (fileName.Contains("___PROJECTNAME___"))
                 {
-                    newFileName = newFileName.Replace("__ProjectName__", ProjectName);
+                    newFileName = newFileName.Replace("___PROJECTNAME___", ProjectName);
                 }
                 if (!_SelectedItem.IsProjectTemplate)
                 {
-                    if (fileName.Contains("__ClassName__"))
+                    if (fileName.Contains("___CLASSNAME___"))
                     {
-                        newFileName = newFileName.Replace("__ClassName__", ClassName);
+                        newFileName = newFileName.Replace("___CLASSNAME___", ClassName);
                     }
                 }
                 // 変更があった場合、新しい名前でリネーム
@@ -225,14 +226,49 @@ namespace DotForge.ViewModels
             }
 
             // 出力先ディレクトリをサブディレクトリを含めて再帰的に取得
-            // ファイルを読み込み、__ProjectName__をProjectNameに置換
-            // ファイルを読み込み、__ClassName__をClassNameに置換
+            // ファイルを読み込み、___PROJECTNAME___をProjectNameに置換
+            // ファイルを読み込み、___CLASSNAME___をClassNameに置換
+            // 再帰的にファイルを取得
             foreach (var filePath in Directory.GetFiles(OutputDirectory, "*", SearchOption.AllDirectories))
             {
-                string text = File.ReadAllText(filePath);
-                text = text.Replace("__ProjectName__", ProjectName);
-                text = text.Replace("__ClassName__", ClassName);
-                File.WriteAllText(filePath, text);
+                // ファイルを読み込む
+                byte[] fileBytes = File.ReadAllBytes(filePath);
+
+                // UTF-8 BOM があるか確認
+                bool hasBOM = fileBytes.Length >= 3 &&
+                              fileBytes[0] == 0xEF &&
+                              fileBytes[1] == 0xBB &&
+                              fileBytes[2] == 0xBF;
+
+                string fileContent;
+                if (hasBOM)
+                {
+                    // BOM をスキップして文字列を読み取る
+                    fileContent = Encoding.UTF8.GetString(fileBytes, 3, fileBytes.Length - 3);
+                }
+                else
+                {
+                    // BOM がない場合はそのまま読み取る
+                    fileContent = Encoding.UTF8.GetString(fileBytes);
+                }
+
+                // 置換処理
+                string updatedContent = fileContent
+                    .Replace("___PROJECTNAME___", ProjectName)
+                    .Replace("___CLASSNAME___", ClassName);
+
+                // ファイルに変更がある場合のみ保存
+                if (updatedContent != fileContent)
+                {
+                    StatusText = $"更新: {filePath}";
+
+                    // UTF-8 BOM を付与して保存
+                    byte[] updatedBytes = hasBOM
+                        ? Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(updatedContent)).ToArray()
+                        : Encoding.UTF8.GetBytes(updatedContent);
+
+                    File.WriteAllBytes(filePath, updatedBytes);
+                }
             }
             StatusText = "出力が完了しました";
         }
