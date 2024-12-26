@@ -149,6 +149,11 @@ namespace DotForge.ViewModels
             }
             else
             {
+                if (ProjectFilePath == string.Empty)
+                {
+                    StatusText = "プロジェクトファイルが未選択です";
+                    return;
+                }
                 if (ProjectName == string.Empty)
                 {
                     StatusText = "プロジェクト名が未入力です";
