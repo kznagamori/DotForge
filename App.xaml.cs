@@ -14,16 +14,16 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         // 多重起動の防止
-        const string appName = "CodeReviewer"; // アプリケーション名
-        mutex = new Mutex(true, appName, out bool createdNew);
+        /*         const string appName = "DotForge"; // アプリケーション名
+                mutex = new Mutex(true, appName, out bool createdNew);
 
-        if (!createdNew)
-        {
-            // すでに起動している
-            MessageBox.Show("アプリケーションがすでに立ち上がっています。", "多重起動防止", MessageBoxButton.OK, MessageBoxImage.Warning);
-            Application.Current.Shutdown();
-            return;
-        }
+                if (!createdNew)
+                {
+                    // すでに起動している
+                    MessageBox.Show("アプリケーションがすでに立ち上がっています。", "多重起動防止", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Application.Current.Shutdown();
+                    return;
+                } */
 
         // 未処理例外のキャッチ
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
