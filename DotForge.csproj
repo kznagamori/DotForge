@@ -19,6 +19,16 @@
         <Watch Include="**/*.xaml" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    </ItemGroup>
+
+    <!-- template ディレクトリをコンパイル対象から除外 -->
+    <ItemGroup>
+        <Compile Remove="template\**\*" />
+    </ItemGroup>
+    <!-- テンプレートファイルのコピー -->
+    <ItemGroup>
+        <None Include="template\**\*" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="template\**\*" CopyToPublishDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>
