@@ -9,14 +9,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ___PROJECTNAME___;
+namespace ___PROJECTNAME___.Views;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+public partial class ___CLASSNAME___ : Window
 {
-    public MainWindow()
+    public ___CLASSNAME___()
     {
         InitializeComponent();
     }

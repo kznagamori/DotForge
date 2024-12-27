@@ -7,5 +7,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
+  <!-- ビルドの高速化 -->
+  <PropertyGroup>
+    <XamlPrecompile>true</XamlPrecompile>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
 
+  <!-- XAML変更時に自動ビルド -->
+  <ItemGroup>
+    <Watch Include="**/*.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="[8.4.0, 9.0.0)" />
+  </ItemGroup>
 </Project>

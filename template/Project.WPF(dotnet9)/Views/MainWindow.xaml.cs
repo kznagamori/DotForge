@@ -14,9 +14,9 @@ namespace ___PROJECTNAME___.Views;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class ___CLASSNAME___ : Window
+public partial class MainWindow : Window
 {
-    public ___CLASSNAME___()
+    public MainWindow()
     {
         InitializeComponent();
     }
