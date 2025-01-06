@@ -316,7 +316,7 @@ namespace DotForge.ViewModels
             }
 
             //windows SDKのバージョンを取得
-            windowsSDKVersionList = new ObservableCollection<string>(SdkHelper.GetInstalledSdkVersionsCombined());
+            windowsSDKVersionList = new ObservableCollection<string>(SdkHelper.GetInstalledSdkVersions());
             if (windowsSDKVersionList.Count > 0)
             {
                 SelectedWindowsSDKVersion = windowsSDKVersionList[0];

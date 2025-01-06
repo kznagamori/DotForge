@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-android;___DOTNET_VERSION___-___WINDOWS_SDK_VERSION___</TargetFrameworks>
+    <TargetFrameworks>net8.0-android;___DOTNET_VERSION___-windows___WINDOWS_SDK_VERSION___</TargetFrameworks>
     <WindowsPackageType>None</WindowsPackageType>
     <OutputType>Exe</OutputType>
     <RootNamespace>___PROJECTNAME___</RootNamespace>
