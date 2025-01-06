@@ -25,6 +25,12 @@ namespace DotForge.ViewModels
         private bool isClassNameRowEnabled = true;
 
         [ObservableProperty]
+        private bool isDotnetVersionRowEnabled = true;
+
+        [ObservableProperty]
+        private bool isWindowsSDKVersionRowEnabled = true;
+
+        [ObservableProperty]
         private bool isOutputDirRowEnabled = true;
 
         [ObservableProperty]
@@ -49,6 +55,8 @@ namespace DotForge.ViewModels
                     IsProjectFileRowEnabled = false;
                     IsProjectNameRowEnabled = true;
                     IsClassNameRowEnabled = false;
+                    isDotnetVersionRowEnabled = true;
+                    isWindowsSDKVersionRowEnabled = true;
                     IsOutputDirRowEnabled = true;
                 }
                 else
@@ -56,6 +64,8 @@ namespace DotForge.ViewModels
                     IsProjectFileRowEnabled = true;
                     IsProjectNameRowEnabled = false;
                     IsClassNameRowEnabled = true;
+                    isDotnetVersionRowEnabled = true;
+                    isWindowsSDKVersionRowEnabled = true;
                     IsOutputDirRowEnabled = true;
                 }
                 IsOutputEnabled = true;
@@ -82,6 +92,14 @@ namespace DotForge.ViewModels
         // クラス名
         [ObservableProperty]
         private string className = string.Empty;
+
+        // .NET バージョン
+        [ObservableProperty]
+        private string dotnetVersion = "net8.0";
+
+        // Windows SDK バージョン
+        [ObservableProperty]
+        private string windowsSDKVersion = "windows10.0.19041.0";
 
         // 出力先ディレクトリ
         [ObservableProperty]
@@ -260,7 +278,9 @@ namespace DotForge.ViewModels
                 // 置換処理
                 string updatedContent = fileContent
                     .Replace("___PROJECTNAME___", ProjectName)
-                    .Replace("___CLASSNAME___", ClassName);
+                    .Replace("___CLASSNAME___", ClassName)
+                    .Replace("___DOTNET_VERSION___", DotnetVersion)
+                    .Replace("___WINDOWS_SDK_VERSION___", WindowsSDKVersion);
 
                 // ファイルに変更がある場合のみ保存
                 if (updatedContent != fileContent)

@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:DotForge.ViewModels"
         mc:Ignorable="d"
         Title="DotForge"
-        Height="320" Width="600"
+        Height="400" Width="600"
         ResizeMode="NoResize"
         Icon="Assets/DotForge.ico">
 
@@ -143,7 +143,41 @@
                            Fill="Transparent"/>
             </DockPanel>
 
-            <!-- 5行目: 出力先ディレクトリ (Label + TextBox + ボタン) -->
+            <!-- 5行目: dotnetバージョン (Label + TextBox) [ボタン無し] -->
+            <DockPanel Margin="4">
+                <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
+                       Content="dotnetバージョン："
+                       IsEnabled="{Binding IsDotnetVersionRowEnabled}" />
+
+                <TextBox DockPanel.Dock="Left"
+                         Style="{StaticResource CommonTextBoxStyle}"
+                         Text="{Binding DotnetVersion, Mode=TwoWay}"
+                         IsEnabled="{Binding IsDotnetVersionRowEnabled}" />
+
+                <Rectangle DockPanel.Dock="Right"
+                           Width="80"
+                           Fill="Transparent"/>
+            </DockPanel>
+
+            <!-- 6行目: Windows SDK バージョン (Label + TextBox) [ボタン無し] -->
+            <DockPanel Margin="4">
+                <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
+                       Content="Windows SDK バージョン："
+                       IsEnabled="{Binding IsWindowsSDKVersionRowEnabled}" />
+
+                <TextBox DockPanel.Dock="Left"
+                         Style="{StaticResource CommonTextBoxStyle}"
+                         Text="{Binding WindowsSDKVersion, Mode=TwoWay}"
+                         IsEnabled="{Binding IsWindowsSDKVersionRowEnabled}" />
+
+                <Rectangle DockPanel.Dock="Right"
+                           Width="80"
+                           Fill="Transparent"/>
+            </DockPanel>
+
+            <!-- 7行目: 出力先ディレクトリ (Label + TextBox + ボタン) -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
