@@ -11,7 +11,30 @@
         ResizeMode="NoResize"
         Icon="Assets/DotForge.ico">
 
-    <!-- ViewModel -->
+    <!-- ◆ リソース領域: 共通Styleを定義 -->
+    <Window.Resources>
+        <!-- Label用のスタイル -->
+        <Style TargetType="Label" x:Key="CommonLabelStyle">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <!-- Margin, Fontなど他に共通化したいプロパティがあれば追加 -->
+        </Style>
+
+        <!-- TextBox用のスタイル -->
+        <Style TargetType="TextBox" x:Key="CommonTextBoxStyle">
+            <Setter Property="Width" Value="360"/>
+            <!-- 他に共通化したいプロパティがあれば追加 -->
+        </Style>
+
+        <!-- Button用のスタイル -->
+        <Style TargetType="Button" x:Key="CommonButtonStyle">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <!-- 他に共通化したいプロパティがあれば追加 -->
+        </Style>
+    </Window.Resources>
+
+    <!-- ▼ ViewModel を DataContext に指定 -->
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -44,21 +67,23 @@
 
             <!-- 1行目: テンプレート (Label + ComboBox) [ボタン無し] -->
             <DockPanel Margin="4">
-                <!-- 左端：Label (固定幅) -->
+                <!-- Label は Styleを適用する -->
                 <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
                        Content="テンプレート："
-                       Width="120"
-                       VerticalAlignment="Center"
                        IsEnabled="{Binding IsTemplateRowEnabled}" />
 
-                <!-- 中央：ComboBox (固定幅) -->
+                <!-- ComboBox は Styleを作るか、TextBoxStyleを流用するかで選択
+                     ここでは個別プロパティ（Width="360"）を直接指定。
+                     もし ComboBox も含めてスタイルにまとめたい場合は
+                     ComboBox用Styleを別途定義してください。 -->
                 <ComboBox DockPanel.Dock="Left"
                           Width="360"
                           ItemsSource="{Binding Templates}"
                           SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
                           IsEnabled="{Binding IsTemplateRowEnabled}" />
 
-                <!-- 右端：ボタンが無い代わりにダミー要素で幅を確保（Width=80） -->
+                <!-- 右端：ダミー要素 -->
                 <Rectangle DockPanel.Dock="Right"
                            Width="80"
                            Fill="Transparent"/>
@@ -67,19 +92,18 @@
             <!-- 2行目: プロジェクトファイル (Label + TextBox + 開くボタン) -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
                        Content="プロジェクトファイル："
-                       Width="120"
-                       VerticalAlignment="Center"
                        IsEnabled="{Binding IsProjectFileRowEnabled}" />
 
                 <TextBox DockPanel.Dock="Left"
-                         Width="360"
+                         Style="{StaticResource CommonTextBoxStyle}"
                          Text="{Binding ProjectFilePath, Mode=TwoWay}"
                          IsEnabled="{Binding IsProjectFileRowEnabled}" />
 
-                <!-- ボタンあり（幅80） -->
+                <!-- ボタンは ButtonStyleを適用 -->
                 <Button DockPanel.Dock="Right"
-                        Width="80"
+                        Style="{StaticResource CommonButtonStyle}"
                         Content="開く"
                         Command="{Binding OpenProjectFileCommand}"
                         IsEnabled="{Binding IsProjectFileRowEnabled}" />
@@ -88,17 +112,15 @@
             <!-- 3行目: プロジェクト名 (Label + TextBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
                        Content="プロジェクト名："
-                       Width="120"
-                       VerticalAlignment="Center"
                        IsEnabled="{Binding IsProjectNameRowEnabled}" />
 
                 <TextBox DockPanel.Dock="Left"
-                         Width="360"
+                         Style="{StaticResource CommonTextBoxStyle}"
                          Text="{Binding ProjectName, Mode=TwoWay}"
                          IsEnabled="{Binding IsProjectNameRowEnabled}" />
 
-                <!-- 右端：ボタンが無いのでダミー要素で幅を確保 -->
                 <Rectangle DockPanel.Dock="Right"
                            Width="80"
                            Fill="Transparent"/>
@@ -107,13 +129,12 @@
             <!-- 4行目: クラス名 (Label + TextBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
                        Content="クラス名："
-                       Width="120"
-                       VerticalAlignment="Center"
                        IsEnabled="{Binding IsClassNameRowEnabled}" />
 
                 <TextBox DockPanel.Dock="Left"
-                         Width="360"
+                         Style="{StaticResource CommonTextBoxStyle}"
                          Text="{Binding ClassName, Mode=TwoWay}"
                          IsEnabled="{Binding IsClassNameRowEnabled}" />
 
@@ -125,18 +146,17 @@
             <!-- 5行目: 出力先ディレクトリ (Label + TextBox + ボタン) -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
                        Content="出力先ディレクトリ："
-                       Width="120"
-                       VerticalAlignment="Center"
                        IsEnabled="{Binding IsOutputDirRowEnabled}" />
 
                 <TextBox DockPanel.Dock="Left"
-                         Width="360"
+                         Style="{StaticResource CommonTextBoxStyle}"
                          Text="{Binding OutputDirectory, Mode=TwoWay}"
                          IsEnabled="{Binding IsOutputDirRowEnabled}" />
 
                 <Button DockPanel.Dock="Right"
-                        Width="80"
+                        Style="{StaticResource CommonButtonStyle}"
                         Content="開く"
                         Command="{Binding OpenOutputDirCommand}"
                         IsEnabled="{Binding IsOutputDirRowEnabled}" />
@@ -144,7 +164,7 @@
 
             <!-- 6行目: 出力ボタン（右寄せ） -->
             <DockPanel Margin="4">
-                <!-- Label/TextBox は不要なのでダミー要素。幅=120+250=370ぶん確保しておいてもOK -->
+                <!-- 左側はダミー要素 -->
                 <Rectangle DockPanel.Dock="Left"
                            Width="400"
                            Fill="Transparent"/>
@@ -156,7 +176,6 @@
                         Command="{Binding GenerateOutputCommand}"
                         IsEnabled="{Binding IsOutputEnabled}" />
             </DockPanel>
-
         </StackPanel>
     </DockPanel>
 </Window>
