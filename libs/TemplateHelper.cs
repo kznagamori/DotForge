@@ -53,10 +53,10 @@ public class TemplateHelper
 
     public static string GetTemplateDirectory()
     {
-        string? exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string exeDirectory = AppContext.BaseDirectory;
         if (exeDirectory == null)
         {
-            throw new ArgumentNullException(nameof(exeDirectory));
+            throw new ArgumentNullException(nameof(exeDirectory)); // ここは念の為残す。BaseDirectoryがnullを返す可能性は低いが。
         }
         return Path.Combine(exeDirectory, "template");
     }

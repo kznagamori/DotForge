@@ -99,7 +99,10 @@ namespace DotForge.ViewModels
 
         // Windows SDK バージョン
         [ObservableProperty]
-        private string windowsSDKVersion = "windows10.0.19041.0";
+        private ObservableCollection<string> windowsSDKVersionList = new();
+
+        [ObservableProperty]
+        private string selectedWindowsSDKVersion = string.Empty;
 
         // 出力先ディレクトリ
         [ObservableProperty]
@@ -280,7 +283,7 @@ namespace DotForge.ViewModels
                     .Replace("___PROJECTNAME___", ProjectName)
                     .Replace("___CLASSNAME___", ClassName)
                     .Replace("___DOTNET_VERSION___", DotnetVersion)
-                    .Replace("___WINDOWS_SDK_VERSION___", WindowsSDKVersion);
+                    .Replace("___WINDOWS_SDK_VERSION___", SelectedWindowsSDKVersion);
 
                 // ファイルに変更がある場合のみ保存
                 if (updatedContent != fileContent)
@@ -302,12 +305,25 @@ namespace DotForge.ViewModels
         {
             // コンストラクタで初期値等を設定
             // 実行中のアセンブリの場所を取得
+
+            // テンプレートディレクトリを取得
             string templateDirectory = TemplateHelper.GetTemplateDirectory();
             _TemplateInfoList = TemplateHelper.GetTempleteInfoList(templateDirectory);
             templates.Clear();
             foreach (var item in _TemplateInfoList)
             {
                 templates.Add(item.TemplateName);
+            }
+
+            //windows SDKのバージョンを取得
+            windowsSDKVersionList = new ObservableCollection<string>(SdkHelper.GetInstalledSdkVersionsCombined());
+            if (windowsSDKVersionList.Count > 0)
+            {
+                SelectedWindowsSDKVersion = windowsSDKVersionList[0];
+            }
+            else
+            {
+                SelectedWindowsSDKVersion = "10.0.19041.0";
             }
         }
     }

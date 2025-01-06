@@ -15,14 +15,20 @@
     <Window.Resources>
         <!-- Label用のスタイル -->
         <Style TargetType="Label" x:Key="CommonLabelStyle">
-            <Setter Property="Width" Value="120"/>
+            <Setter Property="Width" Value="160"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <!-- Margin, Fontなど他に共通化したいプロパティがあれば追加 -->
         </Style>
 
+        <!-- ComboBox用のスタイル -->
+        <Style TargetType="ComboBox" x:Key="CommonComboBoxStyle">
+            <Setter Property="Width" Value="320"/>
+            <!-- 他に共通化したいプロパティがあれば追加 -->
+        </Style>
+
         <!-- TextBox用のスタイル -->
         <Style TargetType="TextBox" x:Key="CommonTextBoxStyle">
-            <Setter Property="Width" Value="360"/>
+            <Setter Property="Width" Value="320"/>
             <!-- 他に共通化したいプロパティがあれば追加 -->
         </Style>
 
@@ -78,7 +84,7 @@
                      もし ComboBox も含めてスタイルにまとめたい場合は
                      ComboBox用Styleを別途定義してください。 -->
                 <ComboBox DockPanel.Dock="Left"
-                          Width="360"
+                          Style="{StaticResource CommonComboBoxStyle}"
                           ItemsSource="{Binding Templates}"
                           SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
                           IsEnabled="{Binding IsTemplateRowEnabled}" />
@@ -167,10 +173,11 @@
                        Content="Windows SDK バージョン："
                        IsEnabled="{Binding IsWindowsSDKVersionRowEnabled}" />
 
-                <TextBox DockPanel.Dock="Left"
-                         Style="{StaticResource CommonTextBoxStyle}"
-                         Text="{Binding WindowsSDKVersion, Mode=TwoWay}"
-                         IsEnabled="{Binding IsWindowsSDKVersionRowEnabled}" />
+                <ComboBox DockPanel.Dock="Left"
+                         Style="{StaticResource CommonComboBoxStyle}"
+                          ItemsSource="{Binding WindowsSDKVersionList}"
+                          SelectedItem="{Binding SelectedWindowsSDKVersion, Mode=TwoWay}"
+                          IsEnabled="{Binding IsWindowsSDKVersionRowEnabled}" />
 
                 <Rectangle DockPanel.Dock="Right"
                            Width="80"
