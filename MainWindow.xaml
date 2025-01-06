@@ -6,37 +6,29 @@
         xmlns:local="clr-namespace:DotForge"
         xmlns:vm="clr-namespace:DotForge.ViewModels"
         mc:Ignorable="d"
-        Title="DotForge" Height="320" Width="600"
+        Title="DotForge"
+        Height="320" Width="600"
         ResizeMode="NoResize"
         Icon="Assets/DotForge.ico">
 
-    <!--
-      ▼ 方法1: XAML上で Window.DataContext に直接 ViewModel を指定する方法
-         （またはコードビハインドで DataContext を指定してもOK）
-    -->
+    <!-- ViewModel -->
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
 
     <DockPanel LastChildFill="True">
+
         <!-- メニューバー -->
         <Grid DockPanel.Dock="Top" Height="20" Background="White">
             <Grid.ColumnDefinitions>
-                <!-- 左メニュー用 -->
                 <ColumnDefinition Width="*" />
-                <!-- 右メニュー用 -->
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-
-            <!-- 左側のメニュー -->
             <Menu Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="48" Background="White">
                 <MenuItem Header="_ファイル">
-                    <!-- 終了は既存のClickイベントをそのまま利用（MVVM的にはCommand化してもOK） -->
                     <MenuItem Header="終了" Click="ExitMenuItem_Click" />
                 </MenuItem>
             </Menu>
-
-            <!-- 右側のメニュー -->
             <Menu Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Height="48" Background="White">
                 <MenuItem Header="_ヘルプ" />
             </Menu>
@@ -48,96 +40,123 @@
         </StatusBar>
 
         <!-- コンテンツエリア -->
-        <Grid Margin="10">
-            <!-- 行定義 -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <!-- 列定義 -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <StackPanel Margin="4">
 
-            <!-- 1行目: テンプレート (Label + ListBox) -->
-            <Label Grid.Row="0" Grid.Column="0"
-                   Content="テンプレート："
-                   Margin="4" VerticalAlignment="Center"
-                   IsEnabled="{Binding IsTemplateRowEnabled}"/>
-            <ComboBox Grid.Row="0" Grid.Column="1"
-                     Height="22"
-                     Margin="4"
-                     ItemsSource="{Binding Templates}"
-                     SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
-                     IsEnabled="{Binding IsTemplateRowEnabled}"/>
+            <!-- 1行目: テンプレート (Label + ComboBox) [ボタン無し] -->
+            <DockPanel Margin="4">
+                <!-- 左端：Label (固定幅) -->
+                <Label DockPanel.Dock="Left"
+                       Content="テンプレート："
+                       Width="120"
+                       VerticalAlignment="Center"
+                       IsEnabled="{Binding IsTemplateRowEnabled}" />
+
+                <!-- 中央：ComboBox (固定幅) -->
+                <ComboBox DockPanel.Dock="Left"
+                          Width="360"
+                          ItemsSource="{Binding Templates}"
+                          SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
+                          IsEnabled="{Binding IsTemplateRowEnabled}" />
+
+                <!-- 右端：ボタンが無い代わりにダミー要素で幅を確保（Width=80） -->
+                <Rectangle DockPanel.Dock="Right"
+                           Width="80"
+                           Fill="Transparent"/>
+            </DockPanel>
 
             <!-- 2行目: プロジェクトファイル (Label + TextBox + 開くボタン) -->
-            <Label Grid.Row="1" Grid.Column="0"
-                   Content="プロジェクトファイル："
-                   Margin="4" VerticalAlignment="Center"
-                   IsEnabled="{Binding IsProjectFileRowEnabled}"/>
-            <TextBox Grid.Row="1" Grid.Column="1"
-                     Height="22"
-                     Margin="4"
-                     Text="{Binding ProjectFilePath, Mode=TwoWay}"
-                     IsEnabled="{Binding IsProjectFileRowEnabled}"/>
-            <Button Grid.Row="1" Grid.Column="2"
-                    Content="開く"
-                    Padding="10,0" Margin="4"
-                    Command="{Binding OpenProjectFileCommand}"
-                    IsEnabled="{Binding IsProjectFileRowEnabled}"/>
+            <DockPanel Margin="4">
+                <Label DockPanel.Dock="Left"
+                       Content="プロジェクトファイル："
+                       Width="120"
+                       VerticalAlignment="Center"
+                       IsEnabled="{Binding IsProjectFileRowEnabled}" />
 
-            <!-- 3行目: プロジェクト名 (Label + TextBox) -->
-            <Label Grid.Row="2" Grid.Column="0"
-                   Content="プロジェクト名："
-                   Margin="4" VerticalAlignment="Center"
-                   IsEnabled="{Binding IsProjectNameRowEnabled}"/>
-            <TextBox Grid.Row="2" Grid.Column="1"
-                     Height="22"
-                     Margin="4"
-                     Text="{Binding ProjectName, Mode=TwoWay}"
-                     IsEnabled="{Binding IsProjectNameRowEnabled}"/>
+                <TextBox DockPanel.Dock="Left"
+                         Width="360"
+                         Text="{Binding ProjectFilePath, Mode=TwoWay}"
+                         IsEnabled="{Binding IsProjectFileRowEnabled}" />
 
-            <!-- 4行目: クラス名 (Label + TextBox) -->
-            <Label Grid.Row="3" Grid.Column="0"
-                   Content="クラス名："
-                   Margin="4" VerticalAlignment="Center"
-                   IsEnabled="{Binding IsClassNameRowEnabled}"/>
-            <TextBox Grid.Row="3" Grid.Column="1"
-                     Height="22"
-                     Margin="4"
-                     Text="{Binding ClassName, Mode=TwoWay}"
-                     IsEnabled="{Binding IsClassNameRowEnabled}"/>
+                <!-- ボタンあり（幅80） -->
+                <Button DockPanel.Dock="Right"
+                        Width="80"
+                        Content="開く"
+                        Command="{Binding OpenProjectFileCommand}"
+                        IsEnabled="{Binding IsProjectFileRowEnabled}" />
+            </DockPanel>
 
-            <!-- 5行目: 出力先ディレクトリ (Label + TextBox + 開くボタン) -->
-            <Label Grid.Row="4" Grid.Column="0"
-                   Content="出力先ディレクトリ："
-                   Margin="4" VerticalAlignment="Center"
-                   IsEnabled="{Binding IsOutputDirRowEnabled}"/>
-            <TextBox Grid.Row="4" Grid.Column="1"
-                     Height="22"
-                     Margin="4"
-                     Text="{Binding OutputDirectory, Mode=TwoWay}"
-                     IsEnabled="{Binding IsOutputDirRowEnabled}"/>
-            <Button Grid.Row="4" Grid.Column="2"
-                    Content="開く"
-                    Padding="10,0" Margin="4"
-                    Command="{Binding OpenOutputDirCommand}"
-                    IsEnabled="{Binding IsOutputDirRowEnabled}"/>
+            <!-- 3行目: プロジェクト名 (Label + TextBox) [ボタン無し] -->
+            <DockPanel Margin="4">
+                <Label DockPanel.Dock="Left"
+                       Content="プロジェクト名："
+                       Width="120"
+                       VerticalAlignment="Center"
+                       IsEnabled="{Binding IsProjectNameRowEnabled}" />
+
+                <TextBox DockPanel.Dock="Left"
+                         Width="360"
+                         Text="{Binding ProjectName, Mode=TwoWay}"
+                         IsEnabled="{Binding IsProjectNameRowEnabled}" />
+
+                <!-- 右端：ボタンが無いのでダミー要素で幅を確保 -->
+                <Rectangle DockPanel.Dock="Right"
+                           Width="80"
+                           Fill="Transparent"/>
+            </DockPanel>
+
+            <!-- 4行目: クラス名 (Label + TextBox) [ボタン無し] -->
+            <DockPanel Margin="4">
+                <Label DockPanel.Dock="Left"
+                       Content="クラス名："
+                       Width="120"
+                       VerticalAlignment="Center"
+                       IsEnabled="{Binding IsClassNameRowEnabled}" />
+
+                <TextBox DockPanel.Dock="Left"
+                         Width="360"
+                         Text="{Binding ClassName, Mode=TwoWay}"
+                         IsEnabled="{Binding IsClassNameRowEnabled}" />
+
+                <Rectangle DockPanel.Dock="Right"
+                           Width="80"
+                           Fill="Transparent"/>
+            </DockPanel>
+
+            <!-- 5行目: 出力先ディレクトリ (Label + TextBox + ボタン) -->
+            <DockPanel Margin="4">
+                <Label DockPanel.Dock="Left"
+                       Content="出力先ディレクトリ："
+                       Width="120"
+                       VerticalAlignment="Center"
+                       IsEnabled="{Binding IsOutputDirRowEnabled}" />
+
+                <TextBox DockPanel.Dock="Left"
+                         Width="360"
+                         Text="{Binding OutputDirectory, Mode=TwoWay}"
+                         IsEnabled="{Binding IsOutputDirRowEnabled}" />
+
+                <Button DockPanel.Dock="Right"
+                        Width="80"
+                        Content="開く"
+                        Command="{Binding OpenOutputDirCommand}"
+                        IsEnabled="{Binding IsOutputDirRowEnabled}" />
+            </DockPanel>
 
             <!-- 6行目: 出力ボタン（右寄せ） -->
-            <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
-                    Content="出力"
-                    HorizontalAlignment="Right"
-                    Padding="40,10" Margin="4"
-                    Command="{Binding GenerateOutputCommand}"
-                    IsEnabled="{Binding IsOutputEnabled}"/>
-        </Grid>
+            <DockPanel Margin="4">
+                <!-- Label/TextBox は不要なのでダミー要素。幅=120+250=370ぶん確保しておいてもOK -->
+                <Rectangle DockPanel.Dock="Left"
+                           Width="400"
+                           Fill="Transparent"/>
+
+                <Button DockPanel.Dock="Right"
+                        Width="160"
+                        Content="出力"
+                        Padding="10,5"
+                        Command="{Binding GenerateOutputCommand}"
+                        IsEnabled="{Binding IsOutputEnabled}" />
+            </DockPanel>
+
+        </StackPanel>
     </DockPanel>
 </Window>
