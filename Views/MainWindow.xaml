@@ -1,15 +1,15 @@
-<Window x:Class="DotForge.MainWindow"
+<Window x:Class="DotForge.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DotForge"
+        xmlns:local="clr-namespace:DotForge.Views"
         xmlns:vm="clr-namespace:DotForge.ViewModels"
         mc:Ignorable="d"
         Title="DotForge"
         Height="400" Width="600"
         ResizeMode="NoResize"
-        Icon="Assets/DotForge.ico">
+        Icon="../Assets/DotForge.ico">
 
     <!-- ◆ リソース領域: 共通Styleを定義 -->
     <Window.Resources>

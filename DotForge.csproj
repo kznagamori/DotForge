@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
@@ -33,6 +33,8 @@
     <ItemGroup>
         <None Include="template\**\*" CopyToOutputDirectory="PreserveNewest" />
         <None Include="template\**\*" CopyToPublishDirectory="PreserveNewest" />
+        <None Include="settings.toml" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="settings.toml" CopyToPublishDirectory="PreserveNewest" />
     </ItemGroup>
 
     <!-- アイコンの設定 -->
