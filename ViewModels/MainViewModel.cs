@@ -56,22 +56,21 @@ namespace DotForge.ViewModels
 
         partial void OnSelectedGroupChanged(string? oldValue, string newValue)
         {
-            _SelectedItem = _TemplateInfoList.Find(x => x.DirectoryName == newValue);
-            if (_SelectedItem != null)
+            var select = _GroupInfoList.Find(x => x.DirectoryName == newValue);
+            if (select != null)
             {
-                IsProjectFileRowEnabled = false;
-                IsProjectNameRowEnabled = true;
-                IsClassNameRowEnabled = false;
-                isDotnetVersionRowEnabled = true;
-                isWindowsSDKVersionRowEnabled = true;
-                IsOutputDirRowEnabled = true;
-                IsOutputEnabled = true;
+                _TemplateInfoList = TemplateHelper.GetDirectoryInfoList(select.FullPath);
+                templates.Clear();
+                foreach (var item in _TemplateInfoList)
+                {
+                    templates.Add(item.DirectoryName);
+                }
+                SelectedTemplate = templates[0];
             }
             else
             {
-                throw new System.Exception("Template not found");
+                throw new System.Exception("Template Group not found");
             }
-
         }
 
 
@@ -90,7 +89,7 @@ namespace DotForge.ViewModels
             }
             else
             {
-                throw new System.Exception("Template not found");
+
             }
 
         }
@@ -322,7 +321,7 @@ namespace DotForge.ViewModels
             {
                 groups.Add(item.DirectoryName);
             }
-            selectedGroup = groups[0];
+            SelectedGroup = groups[0];
 
 
             //windows SDKのバージョンを取得
