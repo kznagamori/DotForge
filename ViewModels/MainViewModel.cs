@@ -38,36 +38,54 @@ namespace DotForge.ViewModels
 
         // ListBox 用データ
         [ObservableProperty]
+        private ObservableCollection<string> groups = new();
+
+        // ComboBox の選択アイテム
+        [ObservableProperty]
+        private string selectedGroup = string.Empty;
+
+        // ListBox 用データ
+        [ObservableProperty]
         private ObservableCollection<string> templates = new();
 
         // ComboBox の選択アイテム
         [ObservableProperty]
         private string selectedTemplate = string.Empty;
 
-        DotForge.TemplateInfoItem? _SelectedItem;
-        partial void OnSelectedTemplateChanged(string? oldValue, string newValue)
+        DotForge.DirectoryInfoItem? _SelectedItem;
+
+        partial void OnSelectedGroupChanged(string? oldValue, string newValue)
         {
-            _SelectedItem = _TemplateInfoList.Find(x => x.TemplateName == newValue);
+            _SelectedItem = _TemplateInfoList.Find(x => x.DirectoryName == newValue);
             if (_SelectedItem != null)
             {
-                if (_SelectedItem.IsProjectTemplate)
-                {
-                    IsProjectFileRowEnabled = false;
-                    IsProjectNameRowEnabled = true;
-                    IsClassNameRowEnabled = false;
-                    isDotnetVersionRowEnabled = true;
-                    isWindowsSDKVersionRowEnabled = true;
-                    IsOutputDirRowEnabled = true;
-                }
-                else
-                {
-                    IsProjectFileRowEnabled = true;
-                    IsProjectNameRowEnabled = false;
-                    IsClassNameRowEnabled = true;
-                    isDotnetVersionRowEnabled = true;
-                    isWindowsSDKVersionRowEnabled = true;
-                    IsOutputDirRowEnabled = true;
-                }
+                IsProjectFileRowEnabled = false;
+                IsProjectNameRowEnabled = true;
+                IsClassNameRowEnabled = false;
+                isDotnetVersionRowEnabled = true;
+                isWindowsSDKVersionRowEnabled = true;
+                IsOutputDirRowEnabled = true;
+                IsOutputEnabled = true;
+            }
+            else
+            {
+                throw new System.Exception("Template not found");
+            }
+
+        }
+
+
+        partial void OnSelectedTemplateChanged(string? oldValue, string newValue)
+        {
+            _SelectedItem = _TemplateInfoList.Find(x => x.DirectoryName == newValue);
+            if (_SelectedItem != null)
+            {
+                IsProjectFileRowEnabled = false;
+                IsProjectNameRowEnabled = true;
+                IsClassNameRowEnabled = false;
+                isDotnetVersionRowEnabled = true;
+                isWindowsSDKVersionRowEnabled = true;
+                IsOutputDirRowEnabled = true;
                 IsOutputEnabled = true;
             }
             else
@@ -160,31 +178,25 @@ namespace DotForge.ViewModels
             {
                 throw new System.Exception("Template not found");
             }
-            if (_SelectedItem.IsProjectTemplate)
+            if (ProjectName == string.Empty)
             {
-                if (ProjectName == string.Empty)
-                {
-                    StatusText = "プロジェクト名が未入力です";
-                    return;
-                }
+                StatusText = "プロジェクト名が未入力です";
+                return;
             }
-            else
+            if (ProjectFilePath == string.Empty)
             {
-                if (ProjectFilePath == string.Empty)
-                {
-                    StatusText = "プロジェクトファイルが未選択です";
-                    return;
-                }
-                if (ProjectName == string.Empty)
-                {
-                    StatusText = "プロジェクト名が未入力です";
-                    return;
-                }
-                if (ClassName == string.Empty)
-                {
-                    StatusText = "クラス名が未入力です";
-                    return;
-                }
+                StatusText = "プロジェクトファイルが未選択です";
+                return;
+            }
+            if (ProjectName == string.Empty)
+            {
+                StatusText = "プロジェクト名が未入力です";
+                return;
+            }
+            if (ClassName == string.Empty)
+            {
+                StatusText = "クラス名が未入力です";
+                return;
             }
             StatusText = "出力中...";
             if (OutputDirectory == string.Empty)
@@ -203,14 +215,11 @@ namespace DotForge.ViewModels
                 //途中がない場合も作成する
                 Directory.CreateDirectory(OutputDirectory);
             }
-            if (_SelectedItem.IsProjectTemplate)
-            {
-                // 出力先+プロジェクト名のディレクトリを作成
-                OutputDirectory = Path.Combine(OutputDirectory, ProjectName);
-                Directory.CreateDirectory(OutputDirectory);
-            }
+            // 出力先+プロジェクト名のディレクトリを作成
+            OutputDirectory = Path.Combine(OutputDirectory, ProjectName);
+            Directory.CreateDirectory(OutputDirectory);
             // 選択したテンプレートディレクトリを取得
-            string templateDirectory = _SelectedItem.DirectoryName;
+            string templateDirectory = _SelectedItem.FullPath;
             // 出力先ディレクトリにテンプレートをコピー
             DirectoryCopyHelper.CopyDirectory(templateDirectory, OutputDirectory, true);
 
@@ -232,12 +241,9 @@ namespace DotForge.ViewModels
                 {
                     newFileName = newFileName.Replace("___PROJECTNAME___", ProjectName);
                 }
-                if (!_SelectedItem.IsProjectTemplate)
+                if (fileName.Contains("___CLASSNAME___"))
                 {
-                    if (fileName.Contains("___CLASSNAME___"))
-                    {
-                        newFileName = newFileName.Replace("___CLASSNAME___", ClassName);
-                    }
+                    newFileName = newFileName.Replace("___CLASSNAME___", ClassName);
                 }
                 // 変更があった場合、新しい名前でリネーム
                 if (newFileName != fileName)
@@ -300,7 +306,9 @@ namespace DotForge.ViewModels
             }
             StatusText = "出力が完了しました";
         }
-        private List<TemplateInfoItem> _TemplateInfoList = new();
+        private List<DirectoryInfoItem> _GroupInfoList = new();
+
+        private List<DirectoryInfoItem> _TemplateInfoList = new();
         public MainViewModel()
         {
             // コンストラクタで初期値等を設定
@@ -308,12 +316,14 @@ namespace DotForge.ViewModels
 
             // テンプレートディレクトリを取得
             string templateDirectory = TemplateHelper.GetTemplateDirectory();
-            _TemplateInfoList = TemplateHelper.GetTempleteInfoList(templateDirectory);
-            templates.Clear();
-            foreach (var item in _TemplateInfoList)
+            _GroupInfoList = TemplateHelper.GetDirectoryInfoList(templateDirectory);
+            groups.Clear();
+            foreach (var item in _GroupInfoList)
             {
-                templates.Add(item.TemplateName);
+                groups.Add(item.DirectoryName);
             }
+            selectedGroup = groups[0];
+
 
             //windows SDKのバージョンを取得
             windowsSDKVersionList = new ObservableCollection<string>(SdkHelper.GetInstalledSdkVersions());

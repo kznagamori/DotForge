@@ -71,6 +71,31 @@
         <!-- コンテンツエリア -->
         <StackPanel Margin="4">
 
+            <!-- 1行目: グループ (Label + ComboBox) [ボタン無し] -->
+            <DockPanel Margin="4">
+                <!-- Label は Styleを適用する -->
+                <Label DockPanel.Dock="Left"
+                       Style="{StaticResource CommonLabelStyle}"
+                       Content="グループ："
+                       IsEnabled="{Binding IsGroupRowEnabled}" />
+
+                <!-- ComboBox は Styleを作るか、TextBoxStyleを流用するかで選択
+                     ここでは個別プロパティ（Width="360"）を直接指定。
+                     もし ComboBox も含めてスタイルにまとめたい場合は
+                     ComboBox用Styleを別途定義してください。 -->
+                <ComboBox DockPanel.Dock="Left"
+                          Style="{StaticResource CommonComboBoxStyle}"
+                          ItemsSource="{Binding Groups}"
+                          SelectedItem="{Binding SelectedGroup, Mode=TwoWay}"
+                          IsEnabled="{Binding IsGroupRowEnabled}" />
+
+                <!-- 右端：ダミー要素 -->
+                <Rectangle DockPanel.Dock="Right"
+                           Width="80"
+                           Fill="Transparent"/>
+            </DockPanel>
+
+
             <!-- 1行目: テンプレート (Label + ComboBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <!-- Label は Styleを適用する -->
