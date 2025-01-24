@@ -96,7 +96,7 @@
             </DockPanel>
 
 
-            <!-- 1行目: テンプレート (Label + ComboBox) [ボタン無し] -->
+            <!-- 2行目: テンプレート (Label + ComboBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <!-- Label は Styleを適用する -->
                 <Label DockPanel.Dock="Left"
@@ -120,7 +120,7 @@
                            Fill="Transparent"/>
             </DockPanel>
 
-            <!-- 2行目: プロジェクトファイル (Label + TextBox + 開くボタン) -->
+            <!-- 3行目: プロジェクトファイル (Label + TextBox + 開くボタン) -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
@@ -140,7 +140,7 @@
                         IsEnabled="{Binding IsProjectFileRowEnabled}" />
             </DockPanel>
 
-            <!-- 3行目: プロジェクト名 (Label + TextBox) [ボタン無し] -->
+            <!-- 4行目: プロジェクト名 (Label + TextBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
@@ -157,7 +157,7 @@
                            Fill="Transparent"/>
             </DockPanel>
 
-            <!-- 4行目: クラス名 (Label + TextBox) [ボタン無し] -->
+            <!-- 5行目: クラス名 (Label + TextBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
@@ -174,7 +174,7 @@
                            Fill="Transparent"/>
             </DockPanel>
 
-            <!-- 5行目: dotnetバージョン (Label + TextBox) [ボタン無し] -->
+            <!-- 6行目: dotnetバージョン (Label + TextBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
@@ -191,7 +191,7 @@
                            Fill="Transparent"/>
             </DockPanel>
 
-            <!-- 6行目: Windows SDK バージョン (Label + TextBox) [ボタン無し] -->
+            <!-- 7行目: Windows SDK バージョン (Label + TextBox) [ボタン無し] -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
@@ -209,7 +209,7 @@
                            Fill="Transparent"/>
             </DockPanel>
 
-            <!-- 7行目: 出力先ディレクトリ (Label + TextBox + ボタン) -->
+            <!-- 8行目: 出力先ディレクトリ (Label + TextBox + ボタン) -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
@@ -228,7 +228,7 @@
                         IsEnabled="{Binding IsOutputDirRowEnabled}" />
             </DockPanel>
 
-            <!-- 6行目: 出力ボタン（右寄せ） -->
+            <!-- 9行目: 出力ボタン（右寄せ） -->
             <DockPanel Margin="4">
                 <!-- 左側はダミー要素 -->
                 <Rectangle DockPanel.Dock="Left"

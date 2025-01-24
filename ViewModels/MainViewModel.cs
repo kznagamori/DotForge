@@ -65,7 +65,14 @@ namespace DotForge.ViewModels
                 {
                     templates.Add(item.DirectoryName);
                 }
-                SelectedTemplate = templates[0];
+                if (templates.Count > 0)
+                {
+                    SelectedTemplate = templates[0];
+                }
+                else
+                {
+                    SelectedTemplate = string.Empty;
+                }
             }
             else
             {
@@ -76,6 +83,10 @@ namespace DotForge.ViewModels
 
         partial void OnSelectedTemplateChanged(string? oldValue, string newValue)
         {
+            if (newValue == null)
+            {
+                return;
+            }
             _SelectedItem = _TemplateInfoList.Find(x => x.DirectoryName == newValue);
             if (_SelectedItem != null)
             {
@@ -89,9 +100,8 @@ namespace DotForge.ViewModels
             }
             else
             {
-
+                throw new System.Exception("Template not found");
             }
-
         }
 
         // プロジェクトファイルパス

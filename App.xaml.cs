@@ -46,6 +46,14 @@ public partial class App : Application
 
         base.OnStartup(e);
 
+        string exeDirectory = AppContext.BaseDirectory;
+        if (exeDirectory == null)
+        {
+            throw new ArgumentNullException(nameof(exeDirectory)); // ここは念の為残す。BaseDirectoryがnullを返す可能性は低いが。
+        }
+        var settings = System.IO.Path.Combine(exeDirectory, "settings.toml");
+
+        Dictionary<string, object> Settings = TomHelper.LoadSettings(settings);
     }
 
     protected override void OnExit(ExitEventArgs e)
