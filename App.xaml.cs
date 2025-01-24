@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DotForge;
 
@@ -10,6 +11,14 @@ namespace DotForge;
 public partial class App : Application
 {
     private static Mutex? mutex = null;
+    private readonly IServiceProvider _serviceProvider;
+
+    public App()
+    {
+        var services = new ServiceCollection();
+        ConfigureServices(services);
+        _serviceProvider = services.BuildServiceProvider();
+    }
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -51,9 +60,8 @@ public partial class App : Application
         {
             throw new ArgumentNullException(nameof(exeDirectory)); // ここは念の為残す。BaseDirectoryがnullを返す可能性は低いが。
         }
-        var settings = System.IO.Path.Combine(exeDirectory, "settings.toml");
-
-        Dictionary<string, object> Settings = TomHelper.LoadSettings(settings);
+        var mainWindow = _serviceProvider.GetRequiredService<Views.MainWindow>();
+        mainWindow.Show();
     }
 
     protected override void OnExit(ExitEventArgs e)
@@ -65,5 +73,28 @@ public partial class App : Application
         }
         base.OnExit(e);
     }
+
+    private void ConfigureServices(ServiceCollection services)
+    {
+        // 実行ファイルのディレクトリを取得
+        string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        // settings.toml のパスを組み立て
+        string settingsPath = System.IO.Path.Combine(exeDirectory, "settings.toml");
+
+
+        // ファクトリの登録
+        services.AddSingleton<IWindowFactory, WindowFactory>();
+
+        // 各データサービスの登録
+        // 設定サービスを登録
+        services.AddSingleton<Services.ISettingsService>(provider => new Services.SettingsService(settingsPath));
+
+        // 各ウィンドウの登録
+        services.AddTransient<Views.MainWindow>();
+        services.AddTransient<ViewModels.MainViewModel>();
+
+        // 他のサービスやウィンドウもここに登録
+    }
+
 }
 

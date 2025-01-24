@@ -16,9 +16,10 @@ namespace DotForge.Views;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(ViewModels.MainViewModel viewModel)
     {
         InitializeComponent();
+        DataContext = viewModel;
     }
     // 終了メニューのクリックイベント
     private void ExitMenuItem_Click(object sender, RoutedEventArgs e)

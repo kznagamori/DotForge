@@ -318,11 +318,17 @@ namespace DotForge.ViewModels
         private List<DirectoryInfoItem> _GroupInfoList = new();
 
         private List<DirectoryInfoItem> _TemplateInfoList = new();
+
         public MainViewModel()
         {
-            // コンストラクタで初期値等を設定
-            // 実行中のアセンブリの場所を取得
+            _settingsService = new Services.SettingsService();
+        }
 
+        private readonly Services.ISettingsService? _settingsService;
+        public MainViewModel(Services.ISettingsService settingsService)
+        {
+            // コンストラクタで初期値等を設定
+            _settingsService = settingsService;
             // テンプレートディレクトリを取得
             string templateDirectory = TemplateHelper.GetTemplateDirectory();
             _GroupInfoList = TemplateHelper.GetDirectoryInfoList(templateDirectory);
