@@ -1,4 +1,5 @@
 ﻿[Project]
+IsCreateProjectDirectory = true
 IsProjectFileRowEnabled = false
 IsProjectNameRowEnabled = true
 IsClassNameRowEnabled = false
@@ -8,6 +9,7 @@ IsOutputDirRowEnabled = true
 IsOutputEnabled = true
 
 [MAUI]
+IsCreateProjectDirectory = true
 IsProjectFileRowEnabled = false
 IsProjectNameRowEnabled = true
 IsClassNameRowEnabled = false
@@ -17,6 +19,7 @@ IsOutputDirRowEnabled = true
 IsOutputEnabled = true
 
 [Blazor]
+IsCreateProjectDirectory = true
 IsProjectFileRowEnabled = false
 IsProjectNameRowEnabled = true
 IsClassNameRowEnabled = false
@@ -26,6 +29,7 @@ IsOutputDirRowEnabled = true
 IsOutputEnabled = true
 
 ["*"]
+IsCreateProjectDirectory = false
 IsProjectFileRowEnabled = true
 IsProjectNameRowEnabled = true
 IsClassNameRowEnabled = true

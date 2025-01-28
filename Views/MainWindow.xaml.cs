@@ -32,4 +32,13 @@ public partial class MainWindow : Window
     {
         Application.Current.Shutdown();
     }
+    private void HelpMenu_Click(object sender, RoutedEventArgs e)
+    {
+        if (_windowFactory == null)
+        {
+            return;
+        }
+        var helpWindow = _windowFactory.CreateWindow<HelpWindow>();
+        helpWindow.ShowDialog();
+    }
 }

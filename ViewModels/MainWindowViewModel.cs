@@ -89,7 +89,9 @@ namespace DotForge.ViewModels
         [ObservableProperty]
         private ObservableCollection<string> outputDirectorys = new();
 
-        DotForge.Utilities.DirectoryInfoItem? _SelectedItem;
+        private DotForge.Utilities.DirectoryInfoItem? _SelectedItem;
+
+        private bool IsCreateProjectDirectory = false;
 
         partial void OnSelectedGroupChanged(string? oldValue, string newValue)
         {
@@ -160,6 +162,15 @@ namespace DotForge.ViewModels
                 IsOutputEnabled = false;
                 return;
             }
+            if (group_settings.ContainsKey("IsCreateProjectDirectory"))
+            {
+                IsCreateProjectDirectory = group_settings["IsCreateProjectDirectory"] as bool? ?? true;
+            }
+            else
+            {
+                IsCreateProjectDirectory = false;
+            }
+
             if (group_settings.ContainsKey("IsProjectFileRowEnabled"))
             {
                 IsProjectFileRowEnabled = group_settings["IsProjectFileRowEnabled"] as bool? ?? true;
@@ -337,21 +348,22 @@ namespace DotForge.ViewModels
                 Directory.CreateDirectory(SelectedOutputDirectory);
             }
             // 出力先+プロジェクト名のディレクトリを作成
+            if (IsCreateProjectDirectory)
+            {
             SelectedOutputDirectory = Path.Combine(SelectedOutputDirectory, ProjectName);
+            }
             Directory.CreateDirectory(SelectedOutputDirectory);
             // 選択したテンプレートディレクトリを取得
             string templateDirectory = _SelectedItem.FullPath;
             // 出力先ディレクトリにテンプレートをコピー
-            Utilities.DirectoryCopier.CopyDirectory(templateDirectory, SelectedOutputDirectory, true);
-
+            var allFiles = Utilities.DirectoryCopier.CopyDirectory(templateDirectory, SelectedOutputDirectory, true);
+            List<string> newFileNameList = new();
             // 出力先ディレクトリをサブディレクトリを含めて再帰的に取得
             // ファイル名の一部にに___PROJECTNAME___が含まれるファイルを検索して置換
             // ___PROJECTNAME___はProjectNameに置き換える
             // ファイル名の一部にに___CLASSNAME___が含まれるファイルを検索して置換
             // ___CLASSNAME___はClassNameに置き換える
             // 再帰的にサブディレクトリを含めて検索
-            var allFiles = Directory.GetFiles(SelectedOutputDirectory, "*", SearchOption.AllDirectories);
-
             foreach (var filePath in allFiles)
             {
                 string fileName = Path.GetFileName(filePath); // ファイル名のみ取得
@@ -375,6 +387,11 @@ namespace DotForge.ViewModels
                     File.Move(filePath, newFilePath);
 
                     StatusText = $"リネーム: {filePath} -> {newFilePath}";
+                    newFileNameList.Add(newFilePath);
+                }
+                else
+                {
+                    newFileNameList.Add(filePath);
                 }
             }
 
@@ -382,7 +399,7 @@ namespace DotForge.ViewModels
             // ファイルを読み込み、___PROJECTNAME___をProjectNameに置換
             // ファイルを読み込み、___CLASSNAME___をClassNameに置換
             // 再帰的にファイルを取得
-            foreach (var filePath in Directory.GetFiles(SelectedOutputDirectory, "*", SearchOption.AllDirectories))
+            foreach (var filePath in newFileNameList)
             {
                 // ファイルを読み込む
                 byte[] fileBytes = File.ReadAllBytes(filePath);

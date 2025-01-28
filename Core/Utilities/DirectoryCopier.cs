@@ -11,7 +11,7 @@ public static class DirectoryCopier
     /// <param name="sourceDir">コピー元ディレクトリ</param>
     /// <param name="destDir">コピー先ディレクトリ</param>
     /// <param name="overwrite">ファイルが存在した場合に上書きするかどうか</param>
-    public static void CopyDirectory(string sourceDir, string destDir, bool overwrite = false)
+    public static List<string> CopyDirectory(string sourceDir, string destDir, bool overwrite = false)
     {
         if (!Directory.Exists(sourceDir))
         {
@@ -21,6 +21,8 @@ public static class DirectoryCopier
         // コピー先ディレクトリを作成 (既に存在していてもOK)
         Directory.CreateDirectory(destDir);
 
+        List<string> copiedFilePaths = new List<string>();
+
         // コピー元ディレクトリにある全てのファイルをコピー
         foreach (var filePath in Directory.GetFiles(sourceDir))
         {
@@ -29,6 +31,7 @@ public static class DirectoryCopier
 
             // ファイルコピー (既存ファイルを上書きする場合は 'overwrite = true' )
             File.Copy(filePath, destFilePath, overwrite);
+            copiedFilePaths.Add(destFilePath);
         }
 
         // サブディレクトリを再帰的にコピー
@@ -38,7 +41,9 @@ public static class DirectoryCopier
             string destSubDirPath = Path.Combine(destDir, subDirName);
 
             // 再帰呼び出し
-            CopyDirectory(subDirPath, destSubDirPath, overwrite);
+            copiedFilePaths.AddRange(CopyDirectory(subDirPath, destSubDirPath, overwrite));
         }
+
+        return copiedFilePaths;
     }
 }
