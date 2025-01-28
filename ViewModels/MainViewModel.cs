@@ -52,6 +52,43 @@ namespace DotForge.ViewModels
         [ObservableProperty]
         private string selectedTemplate = string.Empty;
 
+
+        // プロジェクトファイルパス
+        [ObservableProperty]
+        private string statusText = string.Empty;
+
+        // プロジェクトファイルパス
+        [ObservableProperty]
+        private string selectedProjectFilePath = string.Empty;
+
+        [ObservableProperty]
+        private ObservableCollection<string> projectFilePaths = new();
+
+        // プロジェクト名
+        [ObservableProperty]
+        private string projectName = string.Empty;
+
+        // クラス名
+        [ObservableProperty]
+        private string className = string.Empty;
+
+        // .NET バージョン
+        [ObservableProperty]
+        private string dotnetVersion = "net8.0";
+
+        // Windows SDK バージョン
+        [ObservableProperty]
+        private ObservableCollection<string> windowsSDKVersionList = new();
+
+        [ObservableProperty]
+        private string selectedWindowsSDKVersion = string.Empty;
+
+        // 出力先ディレクトリ
+        [ObservableProperty]
+        private string selectedOutputDirectory = string.Empty;
+        [ObservableProperty]
+        private ObservableCollection<string> outputDirectorys = new();
+
         DotForge.DirectoryInfoItem? _SelectedItem;
 
         partial void OnSelectedGroupChanged(string? oldValue, string newValue)
@@ -94,7 +131,7 @@ namespace DotForge.ViewModels
             {
                 throw new System.Exception("SettingsService not found");
             }
-            ProjectFilePath = String.Empty;
+            SelectedProjectFilePath = String.Empty;
             ProjectName = String.Empty;
             ClassName = String.Empty;
             DotnetVersion = String.Empty;
@@ -117,8 +154,8 @@ namespace DotForge.ViewModels
                 IsProjectFileRowEnabled = false;
                 IsProjectNameRowEnabled = false;
                 IsClassNameRowEnabled = false;
-                isDotnetVersionRowEnabled = false;
-                isWindowsSDKVersionRowEnabled = false;
+                IsDotnetVersionRowEnabled = false;
+                IsWindowsSDKVersionRowEnabled = false;
                 IsOutputDirRowEnabled = false;
                 IsOutputEnabled = false;
                 return;
@@ -149,19 +186,19 @@ namespace DotForge.ViewModels
             }
             if (group_settings.ContainsKey("IsDotnetVersionRowEnabled"))
             {
-                isDotnetVersionRowEnabled = group_settings["IsDotnetVersionRowEnabled"] as bool? ?? true;
+                IsDotnetVersionRowEnabled = group_settings["IsDotnetVersionRowEnabled"] as bool? ?? true;
             }
             else
             {
-                isDotnetVersionRowEnabled = false;
+                IsDotnetVersionRowEnabled = false;
             }
             if (group_settings.ContainsKey("IsWindowsSDKVersionRowEnabled"))
             {
-                isWindowsSDKVersionRowEnabled = group_settings["IsWindowsSDKVersionRowEnabled"] as bool? ?? true;
+                IsWindowsSDKVersionRowEnabled = group_settings["IsWindowsSDKVersionRowEnabled"] as bool? ?? true;
             }
             else
             {
-                isWindowsSDKVersionRowEnabled = false;
+                IsWindowsSDKVersionRowEnabled = false;
             }
             if (group_settings.ContainsKey("IsOutputDirRowEnabled"))
             {
@@ -181,36 +218,26 @@ namespace DotForge.ViewModels
             }
         }
 
-        // プロジェクトファイルパス
-        [ObservableProperty]
-        private string statusText = string.Empty;
+        partial void OnSelectedProjectFilePathChanged(string? oldValue, string newValue)
+        {
+            if (newValue == null)
+            {
+                return;
+            }
+            SelectedProjectFilePath = newValue;
+            // ProjectFilePathのベースファイル名を取得
+            ProjectName = Path.GetFileNameWithoutExtension(SelectedProjectFilePath);
+        }
 
-        // プロジェクトファイルパス
-        [ObservableProperty]
-        private string projectFilePath = string.Empty;
+        partial void OnSelectedOutputDirectoryChanged(string? oldValue, string newValue)
+        {
+            if (newValue == null)
+            {
+                return;
+            }
+            SelectedOutputDirectory = newValue;
+        }
 
-        // プロジェクト名
-        [ObservableProperty]
-        private string projectName = string.Empty;
-
-        // クラス名
-        [ObservableProperty]
-        private string className = string.Empty;
-
-        // .NET バージョン
-        [ObservableProperty]
-        private string dotnetVersion = "net8.0";
-
-        // Windows SDK バージョン
-        [ObservableProperty]
-        private ObservableCollection<string> windowsSDKVersionList = new();
-
-        [ObservableProperty]
-        private string selectedWindowsSDKVersion = string.Empty;
-
-        // 出力先ディレクトリ
-        [ObservableProperty]
-        private string outputDirectory = string.Empty;
 
         // コマンド: プロジェクトファイル選択
         [RelayCommand]
@@ -224,9 +251,10 @@ namespace DotForge.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
-                ProjectFilePath = dialog.FileName;
+                SelectedProjectFilePath = dialog.FileName;
+                ProjectFilePaths.Add(SelectedProjectFilePath);
                 // ProjectFilePathのベースファイル名を取得
-                ProjectName = Path.GetFileNameWithoutExtension(ProjectFilePath);
+                ProjectName = Path.GetFileNameWithoutExtension(SelectedProjectFilePath);
             }
         }
 
@@ -240,9 +268,9 @@ namespace DotForge.ViewModels
                 dialog.IsFolderPicker = true;
                 dialog.Title = "出力先ディレクトリを選択してください";
                 // ProjectFilePathが設定されている場合は、そのディレクトリを初期ディレクトリとする
-                if (!string.IsNullOrEmpty(ProjectFilePath))
+                if (!string.IsNullOrEmpty(SelectedProjectFilePath))
                 {
-                    dialog.InitialDirectory = Path.GetDirectoryName(ProjectFilePath);
+                    dialog.InitialDirectory = Path.GetDirectoryName(SelectedProjectFilePath);
                 }
                 else
                 {
@@ -251,7 +279,8 @@ namespace DotForge.ViewModels
                 }
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    OutputDirectory = dialog.FileName;
+                    SelectedOutputDirectory = dialog.FileName;
+                    OutputDirectorys.Add(SelectedOutputDirectory);
                 }
             }
         }
@@ -264,7 +293,7 @@ namespace DotForge.ViewModels
             {
                 throw new System.Exception("Template not found");
             }
-            if (IsProjectFileRowEnabled && ProjectFilePath == string.Empty)
+            if (IsProjectFileRowEnabled && SelectedProjectFilePath == string.Empty)
             {
                 StatusText = "プロジェクトファイルが未選択です";
                 return;
@@ -290,30 +319,30 @@ namespace DotForge.ViewModels
                 StatusText = "Windows SDK バージョンが未選択です";
                 return;
             }
-            if (IsOutputDirRowEnabled && OutputDirectory == string.Empty)
+            if (IsOutputDirRowEnabled && SelectedOutputDirectory == string.Empty)
             {
                 StatusText = "出力先ディレクトリが未入力です";
                 return;
             }
             StatusText = "出力中...";
-            if (!TryHelper.TryExec(() => new FileInfo(OutputDirectory)))
+            if (!TryHelper.TryExec(() => new FileInfo(SelectedOutputDirectory)))
             {
                 StatusText = "出力先ディレクトリが無効です";
                 return;
             }
             // 出力先ディレクトリが存在しない場合は作成
-            if (!Directory.Exists(OutputDirectory))
+            if (!Directory.Exists(SelectedOutputDirectory))
             {
                 //途中がない場合も作成する
-                Directory.CreateDirectory(OutputDirectory);
+                Directory.CreateDirectory(SelectedOutputDirectory);
             }
             // 出力先+プロジェクト名のディレクトリを作成
-            OutputDirectory = Path.Combine(OutputDirectory, ProjectName);
-            Directory.CreateDirectory(OutputDirectory);
+            SelectedOutputDirectory = Path.Combine(SelectedOutputDirectory, ProjectName);
+            Directory.CreateDirectory(SelectedOutputDirectory);
             // 選択したテンプレートディレクトリを取得
             string templateDirectory = _SelectedItem.FullPath;
             // 出力先ディレクトリにテンプレートをコピー
-            DirectoryCopyHelper.CopyDirectory(templateDirectory, OutputDirectory, true);
+            DirectoryCopyHelper.CopyDirectory(templateDirectory, SelectedOutputDirectory, true);
 
             // 出力先ディレクトリをサブディレクトリを含めて再帰的に取得
             // ファイル名の一部にに___PROJECTNAME___が含まれるファイルを検索して置換
@@ -321,7 +350,7 @@ namespace DotForge.ViewModels
             // ファイル名の一部にに___CLASSNAME___が含まれるファイルを検索して置換
             // ___CLASSNAME___はClassNameに置き換える
             // 再帰的にサブディレクトリを含めて検索
-            var allFiles = Directory.GetFiles(OutputDirectory, "*", SearchOption.AllDirectories);
+            var allFiles = Directory.GetFiles(SelectedOutputDirectory, "*", SearchOption.AllDirectories);
 
             foreach (var filePath in allFiles)
             {
@@ -353,7 +382,7 @@ namespace DotForge.ViewModels
             // ファイルを読み込み、___PROJECTNAME___をProjectNameに置換
             // ファイルを読み込み、___CLASSNAME___をClassNameに置換
             // 再帰的にファイルを取得
-            foreach (var filePath in Directory.GetFiles(OutputDirectory, "*", SearchOption.AllDirectories))
+            foreach (var filePath in Directory.GetFiles(SelectedOutputDirectory, "*", SearchOption.AllDirectories))
             {
                 // ファイルを読み込む
                 byte[] fileBytes = File.ReadAllBytes(filePath);

@@ -120,16 +120,17 @@
                            Fill="Transparent"/>
             </DockPanel>
 
-            <!-- 3行目: プロジェクトファイル (Label + TextBox + 開くボタン) -->
+            <!-- 3行目: プロジェクトファイル (Label + ComboBox + 開くボタン) -->
             <DockPanel Margin="4">
                 <Label DockPanel.Dock="Left"
                        Style="{StaticResource CommonLabelStyle}"
                        Content="プロジェクトファイル："
                        IsEnabled="{Binding IsProjectFileRowEnabled}" />
 
-                <TextBox DockPanel.Dock="Left"
-                         Style="{StaticResource CommonTextBoxStyle}"
-                         Text="{Binding ProjectFilePath, Mode=TwoWay}"
+                <ComboBox DockPanel.Dock="Left"
+                         Style="{StaticResource CommonComboBoxStyle}"
+                         ItemsSource="{Binding ProjectFilePaths}"
+                         SelectedItem="{Binding SelectedProjectFilePath, Mode=TwoWay}"
                          IsEnabled="{Binding IsProjectFileRowEnabled}" />
 
                 <!-- ボタンは ButtonStyleを適用 -->
@@ -216,9 +217,10 @@
                        Content="出力先ディレクトリ："
                        IsEnabled="{Binding IsOutputDirRowEnabled}" />
 
-                <TextBox DockPanel.Dock="Left"
-                         Style="{StaticResource CommonTextBoxStyle}"
-                         Text="{Binding OutputDirectory, Mode=TwoWay}"
+                <ComboBox DockPanel.Dock="Left"
+                         Style="{StaticResource CommonComboBoxStyle}"
+                         ItemsSource="{Binding OutputDirectorys, Mode=TwoWay}"
+                         SelectedItem="{Binding SelectedOutputDirectory, Mode=TwoWay}"
                          IsEnabled="{Binding IsOutputDirRowEnabled}" />
 
                 <Button DockPanel.Dock="Right"
