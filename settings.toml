@@ -1,12 +1,18 @@
-﻿[application]
-name = "MyApp"
-version = "1.0.0"
+﻿[Project]
+IsProjectFileRowEnabled = false
+IsProjectNameRowEnabled = true
+IsClassNameRowEnabled = false
+IsDotnetVersionRowEnabled = true
+IsWindowsSDKVersionRowEnabled = true
+IsOutputDirRowEnabled = true
+IsOutputEnabled = true
 
-[database]
-host = "localhost"
-port = 5432
-username = "user"
-password = "password"
-
-
+["*"]
+IsProjectFileRowEnabled = true
+IsProjectNameRowEnabled = true
+IsClassNameRowEnabled = true
+IsDotnetVersionRowEnabled = false
+IsWindowsSDKVersionRowEnabled = false
+IsOutputDirRowEnabled = true
+IsOutputEnabled = true
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace DotForge;
+
 static class TomHelper
 {
     /// <summary>
@@ -20,7 +21,19 @@ static class TomHelper
     /// </summary>
     public static Dictionary<string, object> TomlToDictionary(string toml)
     {
-        return Toml.ToModel<Dictionary<string, object>>(toml);
+        var parseResult = Toml.Parse(toml);
+        if (parseResult.HasErrors)
+        {
+            throw new FormatException("TOMLのパースに失敗しました。エラー: " + string.Join(", ", parseResult.Diagnostics));
+        }
+
+        var tomlTable = parseResult.ToModel() as TomlTable;
+        if (tomlTable == null)
+        {
+            throw new InvalidDataException("TOMLデータがテーブル形式ではありません。");
+        }
+
+        return TomlTableToDictionary(tomlTable);
     }
 
     /// <summary>
@@ -50,16 +63,10 @@ static class TomHelper
                 Console.WriteLine($"{kvp.Key}:");
                 PrintDictionary(innerDict, indent + 1);
             }
-            else if (kvp.Value is TomlTable innerTomlTable)
+            else if (kvp.Value is List<object> innerList)
             {
                 Console.WriteLine($"{kvp.Key}:");
-                var dict = TomlTableToDictionary(innerTomlTable);
-                PrintDictionary(dict, indent + 1);
-            }
-            else if (kvp.Value is TomlArray innerTomlArray)
-            {
-                Console.WriteLine($"{kvp.Key}:");
-                PrintArray(innerTomlArray, indent + 1);
+                PrintList(innerList, indent + 1);
             }
             else
             {
@@ -84,25 +91,24 @@ static class TomHelper
     /// <summary>
     /// TomlArray の内容を再帰的に表示します（デバッグ用）。
     /// </summary>
-    private static void PrintArray(TomlArray tomlArray, int indent = 0)
+    private static void PrintList(List<object> list, int indent = 0)
     {
-        for (int i = 0; i < tomlArray.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             PrintIndent(indent);
-            if (tomlArray[i] is TomlTable innerTomlTable)
+            if (list[i] is Dictionary<string, object> innerDict)
             {
                 Console.WriteLine($"[{i}]:");
-                var dict = TomlTableToDictionary(innerTomlTable);
-                PrintDictionary(dict, indent + 1);
+                PrintDictionary(innerDict, indent + 1);
             }
-            else if (tomlArray[i] is TomlArray innerTomlArray)
+            else if (list[i] is List<object> innerList)
             {
                 Console.WriteLine($"[{i}]:");
-                PrintArray(innerTomlArray, indent + 1);
+                PrintList(innerList, indent + 1);
             }
             else
             {
-                Console.WriteLine($"[{i}]: {tomlArray[i]}");
+                Console.WriteLine($"[{i}]: {list[i]}");
             }
         }
     }

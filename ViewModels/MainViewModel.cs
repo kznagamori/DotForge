@@ -83,24 +83,101 @@ namespace DotForge.ViewModels
 
         partial void OnSelectedTemplateChanged(string? oldValue, string newValue)
         {
+            Dictionary<string, object>? group_settings = null;
             if (newValue == null)
             {
                 return;
             }
             _SelectedItem = _TemplateInfoList.Find(x => x.DirectoryName == newValue);
-            if (_SelectedItem != null)
+
+            if (_settingsService == null)
             {
-                IsProjectFileRowEnabled = false;
-                IsProjectNameRowEnabled = true;
-                IsClassNameRowEnabled = false;
-                isDotnetVersionRowEnabled = true;
-                isWindowsSDKVersionRowEnabled = true;
-                IsOutputDirRowEnabled = true;
-                IsOutputEnabled = true;
+                throw new System.Exception("SettingsService not found");
+            }
+            ProjectFilePath = String.Empty;
+            ProjectName = String.Empty;
+            ClassName = String.Empty;
+            DotnetVersion = String.Empty;
+
+            if (_settingsService.Settings.Toml.ContainsKey(selectedGroup))
+            {
+                var obj = _settingsService.Settings.Toml[selectedGroup];
+                group_settings = _settingsService.Settings.Toml[selectedGroup] as Dictionary<string, object>;
+            }
+            else if (_settingsService.Settings.Toml.ContainsKey("*"))
+            {
+                group_settings = _settingsService.Settings.Toml["*"] as Dictionary<string, object>;
             }
             else
             {
-                throw new System.Exception("Template not found");
+                throw new System.Exception("SettingsService not found");
+            }
+            if (group_settings == null)
+            {
+                IsProjectFileRowEnabled = false;
+                IsProjectNameRowEnabled = false;
+                IsClassNameRowEnabled = false;
+                isDotnetVersionRowEnabled = false;
+                isWindowsSDKVersionRowEnabled = false;
+                IsOutputDirRowEnabled = false;
+                IsOutputEnabled = false;
+                return;
+            }
+            if (group_settings.ContainsKey("IsProjectFileRowEnabled"))
+            {
+                IsProjectFileRowEnabled = group_settings["IsProjectFileRowEnabled"] as bool? ?? true;
+            }
+            else
+            {
+                IsProjectFileRowEnabled = false;
+            }
+            if (group_settings.ContainsKey("IsProjectNameRowEnabled"))
+            {
+                IsProjectNameRowEnabled = group_settings["IsProjectNameRowEnabled"] as bool? ?? true;
+            }
+            else
+            {
+                IsProjectNameRowEnabled = false;
+            }
+            if (group_settings.ContainsKey("IsClassNameRowEnabled"))
+            {
+                IsClassNameRowEnabled = group_settings["IsClassNameRowEnabled"] as bool? ?? true;
+            }
+            else
+            {
+                IsClassNameRowEnabled = false;
+            }
+            if (group_settings.ContainsKey("IsDotnetVersionRowEnabled"))
+            {
+                isDotnetVersionRowEnabled = group_settings["IsDotnetVersionRowEnabled"] as bool? ?? true;
+            }
+            else
+            {
+                isDotnetVersionRowEnabled = false;
+            }
+            if (group_settings.ContainsKey("IsWindowsSDKVersionRowEnabled"))
+            {
+                isWindowsSDKVersionRowEnabled = group_settings["IsWindowsSDKVersionRowEnabled"] as bool? ?? true;
+            }
+            else
+            {
+                isWindowsSDKVersionRowEnabled = false;
+            }
+            if (group_settings.ContainsKey("IsOutputDirRowEnabled"))
+            {
+                IsOutputDirRowEnabled = group_settings["IsOutputDirRowEnabled"] as bool? ?? true;
+            }
+            else
+            {
+                IsOutputDirRowEnabled = false;
+            }
+            if (group_settings.ContainsKey("IsOutputEnabled"))
+            {
+                IsOutputEnabled = group_settings["IsOutputEnabled"] as bool? ?? false;
+            }
+            else
+            {
+                IsOutputEnabled = false;
             }
         }
 
@@ -187,32 +264,38 @@ namespace DotForge.ViewModels
             {
                 throw new System.Exception("Template not found");
             }
-            if (ProjectName == string.Empty)
-            {
-                StatusText = "プロジェクト名が未入力です";
-                return;
-            }
-            if (ProjectFilePath == string.Empty)
+            if (IsProjectFileRowEnabled && ProjectFilePath == string.Empty)
             {
                 StatusText = "プロジェクトファイルが未選択です";
                 return;
             }
-            if (ProjectName == string.Empty)
+
+            if (IsProjectNameRowEnabled && ProjectName == string.Empty)
             {
                 StatusText = "プロジェクト名が未入力です";
                 return;
             }
-            if (ClassName == string.Empty)
+            if (IsClassNameRowEnabled && ClassName == string.Empty)
             {
                 StatusText = "クラス名が未入力です";
                 return;
             }
-            StatusText = "出力中...";
-            if (OutputDirectory == string.Empty)
+            if (IsDotnetVersionRowEnabled && DotnetVersion == string.Empty)
+            {
+                StatusText = ".NET バージョンが未入力です";
+                return;
+            }
+            if (IsWindowsSDKVersionRowEnabled && SelectedWindowsSDKVersion == string.Empty)
+            {
+                StatusText = "Windows SDK バージョンが未選択です";
+                return;
+            }
+            if (IsOutputDirRowEnabled && OutputDirectory == string.Empty)
             {
                 StatusText = "出力先ディレクトリが未入力です";
                 return;
             }
+            StatusText = "出力中...";
             if (!TryHelper.TryExec(() => new FileInfo(OutputDirectory)))
             {
                 StatusText = "出力先ディレクトリが無効です";
@@ -338,7 +421,6 @@ namespace DotForge.ViewModels
                 groups.Add(item.DirectoryName);
             }
             SelectedGroup = groups[0];
-
 
             //windows SDKのバージョンを取得
             windowsSDKVersionList = new ObservableCollection<string>(SdkHelper.GetInstalledSdkVersions());
