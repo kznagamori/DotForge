@@ -16,8 +16,15 @@ namespace ___PROJECTNAME___.Views;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private readonly IWindowFactory? _windowFactory;
     public MainWindow()
     {
         InitializeComponent();
+    }
+    public MainWindow(IWindowFactory windowFactory, ViewModels.MainWindowViewModel viewModel)
+    {
+        InitializeComponent();
+        DataContext = viewModel;
+        _windowFactory = windowFactory;
     }
 }

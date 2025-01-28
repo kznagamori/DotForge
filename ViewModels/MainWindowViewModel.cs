@@ -74,7 +74,7 @@ namespace DotForge.ViewModels
 
         // .NET バージョン
         [ObservableProperty]
-        private string dotnetVersion = "net8.0";
+        private string dotnetVersion = "8.0";
 
         // Windows SDK バージョン
         [ObservableProperty]
@@ -134,7 +134,7 @@ namespace DotForge.ViewModels
             SelectedProjectFilePath = String.Empty;
             ProjectName = String.Empty;
             ClassName = String.Empty;
-            DotnetVersion = String.Empty;
+            DotnetVersion = "8.0";
 
             if (_settingsService.Settings.Toml.ContainsKey(selectedGroup))
             {

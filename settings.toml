@@ -7,6 +7,24 @@ IsWindowsSDKVersionRowEnabled = true
 IsOutputDirRowEnabled = true
 IsOutputEnabled = true
 
+[MAUI]
+IsProjectFileRowEnabled = false
+IsProjectNameRowEnabled = true
+IsClassNameRowEnabled = false
+IsDotnetVersionRowEnabled = true
+IsWindowsSDKVersionRowEnabled = true
+IsOutputDirRowEnabled = true
+IsOutputEnabled = true
+
+[Blazor]
+IsProjectFileRowEnabled = false
+IsProjectNameRowEnabled = true
+IsClassNameRowEnabled = false
+IsDotnetVersionRowEnabled = true
+IsWindowsSDKVersionRowEnabled = true
+IsOutputDirRowEnabled = true
+IsOutputEnabled = true
+
 ["*"]
 IsProjectFileRowEnabled = true
 IsProjectNameRowEnabled = true
