@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 
-namespace DotForge;
-public static class DirectoryCopyHelper
+namespace DotForge.Utilities;
+public static class DirectoryCopier
 {
     /// <summary>
     /// sourceDirの内容（ファイル・サブディレクトリ）をdestDirにコピーする。

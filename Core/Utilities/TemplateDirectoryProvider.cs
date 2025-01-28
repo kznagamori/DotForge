@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace DotForge;
+namespace DotForge.Utilities;
 public class DirectoryInfoItem
 {
     public string FullPath { get; set; } = string.Empty; // ディレクトリ名
     public string DirectoryName { get; set; } = string.Empty;// テンプレート名
 }
 
-public class TemplateHelper
+public class TemplateDirectoryProvider
 {
     public static List<DirectoryInfoItem> GetDirectoryInfoList(string templateDirectory)
     {

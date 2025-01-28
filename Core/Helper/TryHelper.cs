@@ -1,4 +1,4 @@
-namespace DotForge;
+namespace DotForge.Helper;
 
 public static class TryHelper
 {

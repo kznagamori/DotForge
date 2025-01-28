@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace DotForge;
+namespace DotForge.Utilities;
 
-static class TomHelper
+static class TOMLParser
 {
     /// <summary>
     /// オブジェクトを TOML 文字列に変換します。

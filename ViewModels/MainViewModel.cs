@@ -89,14 +89,14 @@ namespace DotForge.ViewModels
         [ObservableProperty]
         private ObservableCollection<string> outputDirectorys = new();
 
-        DotForge.DirectoryInfoItem? _SelectedItem;
+        DotForge.Utilities.DirectoryInfoItem? _SelectedItem;
 
         partial void OnSelectedGroupChanged(string? oldValue, string newValue)
         {
             var select = _GroupInfoList.Find(x => x.DirectoryName == newValue);
             if (select != null)
             {
-                _TemplateInfoList = TemplateHelper.GetDirectoryInfoList(select.FullPath);
+                _TemplateInfoList = Utilities.TemplateDirectoryProvider.GetDirectoryInfoList(select.FullPath);
                 templates.Clear();
                 foreach (var item in _TemplateInfoList)
                 {
@@ -325,7 +325,7 @@ namespace DotForge.ViewModels
                 return;
             }
             StatusText = "出力中...";
-            if (!TryHelper.TryExec(() => new FileInfo(SelectedOutputDirectory)))
+            if (!Helper.TryHelper.TryExec(() => new FileInfo(SelectedOutputDirectory)))
             {
                 StatusText = "出力先ディレクトリが無効です";
                 return;
@@ -342,7 +342,7 @@ namespace DotForge.ViewModels
             // 選択したテンプレートディレクトリを取得
             string templateDirectory = _SelectedItem.FullPath;
             // 出力先ディレクトリにテンプレートをコピー
-            DirectoryCopyHelper.CopyDirectory(templateDirectory, SelectedOutputDirectory, true);
+            Utilities.DirectoryCopier.CopyDirectory(templateDirectory, SelectedOutputDirectory, true);
 
             // 出力先ディレクトリをサブディレクトリを含めて再帰的に取得
             // ファイル名の一部にに___PROJECTNAME___が含まれるファイルを検索して置換
@@ -427,9 +427,9 @@ namespace DotForge.ViewModels
             }
             StatusText = "出力が完了しました";
         }
-        private List<DirectoryInfoItem> _GroupInfoList = new();
+        private List<Utilities.DirectoryInfoItem> _GroupInfoList = new();
 
-        private List<DirectoryInfoItem> _TemplateInfoList = new();
+        private List<Utilities.DirectoryInfoItem> _TemplateInfoList = new();
 
         public MainViewModel()
         {
@@ -437,13 +437,15 @@ namespace DotForge.ViewModels
         }
 
         private readonly Services.ISettingsService? _settingsService;
-        public MainViewModel(Services.ISettingsService settingsService)
+        private readonly IWindowFactory? _windowFactory;
+        public MainViewModel(Services.ISettingsService settingsService, IWindowFactory windowFactory)
         {
             // コンストラクタで初期値等を設定
             _settingsService = settingsService;
+            _windowFactory = windowFactory;
             // テンプレートディレクトリを取得
-            string templateDirectory = TemplateHelper.GetTemplateDirectory();
-            _GroupInfoList = TemplateHelper.GetDirectoryInfoList(templateDirectory);
+            string templateDirectory = Utilities.TemplateDirectoryProvider.GetTemplateDirectory();
+            _GroupInfoList = Utilities.TemplateDirectoryProvider.GetDirectoryInfoList(templateDirectory);
             groups.Clear();
             foreach (var item in _GroupInfoList)
             {
@@ -452,7 +454,7 @@ namespace DotForge.ViewModels
             SelectedGroup = groups[0];
 
             //windows SDKのバージョンを取得
-            windowsSDKVersionList = new ObservableCollection<string>(SdkHelper.GetInstalledSdkVersions());
+            windowsSDKVersionList = new ObservableCollection<string>(Utilities.SdkVersionProvider.GetInstalledSdkVersions());
             if (windowsSDKVersionList.Count > 0)
             {
                 SelectedWindowsSDKVersion = windowsSDKVersionList[0];

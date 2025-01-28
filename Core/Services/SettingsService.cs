@@ -21,6 +21,6 @@ public class SettingsService : ISettingsService
             throw new FileNotFoundException("設定ファイルが見つかりません。", settingsFilePath);
         }
         // TomlModel を AppCommonData に変換
-        Settings.Toml = TomHelper.LoadSettings(settingsFilePath);
+        Settings.Toml = Utilities.TOMLParser.LoadSettings(settingsFilePath);
     }
 }

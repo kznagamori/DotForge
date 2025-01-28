@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 
-namespace DotForge;
-public static class SdkHelper
+namespace DotForge.Utilities;
+public static class SdkVersionProvider
 {
     public static List<string> GetInstalledSdkVersions()
     {

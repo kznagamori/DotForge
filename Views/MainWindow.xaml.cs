@@ -16,10 +16,16 @@ namespace DotForge.Views;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindow(ViewModels.MainViewModel viewModel)
+    private readonly IWindowFactory? _windowFactory;
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+    public MainWindow(ViewModels.MainViewModel viewModel, IWindowFactory windowFactory)
     {
         InitializeComponent();
         DataContext = viewModel;
+        _windowFactory = windowFactory;
     }
     // 終了メニューのクリックイベント
     private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
