@@ -9,7 +9,7 @@ using System.Text;
 
 namespace DotForge.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class MainWindowViewModel : ObservableObject
     {
         // 行ごとの有効／無効を管理するプロパティ
         [ObservableProperty]
@@ -431,14 +431,14 @@ namespace DotForge.ViewModels
 
         private List<Utilities.DirectoryInfoItem> _TemplateInfoList = new();
 
-        public MainViewModel()
+        public MainWindowViewModel()
         {
             _settingsService = new Services.SettingsService();
         }
 
         private readonly Services.ISettingsService? _settingsService;
         private readonly IWindowFactory? _windowFactory;
-        public MainViewModel(Services.ISettingsService settingsService, IWindowFactory windowFactory)
+        public MainWindowViewModel(Services.ISettingsService settingsService, IWindowFactory windowFactory)
         {
             // コンストラクタで初期値等を設定
             _settingsService = settingsService;

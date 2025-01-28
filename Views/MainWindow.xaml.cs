@@ -21,7 +21,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
-    public MainWindow(ViewModels.MainViewModel viewModel, IWindowFactory windowFactory)
+    public MainWindow(ViewModels.MainWindowViewModel viewModel, IWindowFactory windowFactory)
     {
         InitializeComponent();
         DataContext = viewModel;

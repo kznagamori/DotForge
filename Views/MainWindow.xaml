@@ -42,7 +42,7 @@
 
     <!-- ▼ ViewModel を DataContext に指定 -->
     <Window.DataContext>
-        <vm:MainViewModel/>
+        <vm:MainWindowViewModel/>
     </Window.DataContext>
 
     <DockPanel LastChildFill="True">

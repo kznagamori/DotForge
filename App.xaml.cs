@@ -91,7 +91,7 @@ public partial class App : Application
 
         // 各ウィンドウの登録
         services.AddTransient<Views.MainWindow>();
-        services.AddTransient<ViewModels.MainViewModel>();
+        services.AddTransient<ViewModels.MainWindowViewModel>();
 
         // 他のサービスやウィンドウもここに登録
     }
