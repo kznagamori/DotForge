@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 namespace ___PROJECTNAME___.Views;
 
 /// <summary>
-/// Interaction logic for MainWindow.xaml
+/// Interaction logic for ___CLASSNAME___.xaml
 /// </summary>
 public partial class ___CLASSNAME___ : Window
 {
