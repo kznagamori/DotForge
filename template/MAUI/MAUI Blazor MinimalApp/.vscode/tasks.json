@@ -8,7 +8,7 @@
 			"args": [
 				"build",
 				"-f",
-				"net8.0-windows10.0.19041.0"
+				"net___DOTNET_VERSION___-windows___WINDOWS_SDK_VERSION___"
 			],
 			"problemMatcher": "$msCompile",
 			"group": {
@@ -23,7 +23,7 @@
 			"args": [
 				"build",
 				"-f",
-				"net8.0-android",
+				"net___DOTNET_VERSION___-android",
 			],
 			"problemMatcher": "$msCompile",
 			"group": {
@@ -39,7 +39,7 @@
 				"build",
 				"-t:Run",
 				"-f",
-				"net8.0-android",
+				"net___DOTNET_VERSION___-android",
 				"-p:AndroidAttachDebugger=true",
 				"-p:AndroidSdbHostPort=10000"
 			],
