@@ -20,4 +20,9 @@ public partial class ___CLASSNAME___ : Window
     {
         InitializeComponent();
     }
+    public ___CLASSNAME___(ViewModels.___CLASSNAME___ViewModel viewModel)
+    {
+        InitializeComponent();
+        DataContext = viewModel;
+    }
 }

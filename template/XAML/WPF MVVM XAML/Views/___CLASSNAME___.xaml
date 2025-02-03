@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:___PROJECTNAME___.Views"
         xmlns:vm="clr-namespace:___PROJECTNAME___.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behaviors="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         mc:Ignorable="d"
         Title="___CLASSNAME___" Height="450" Width="800">
     <!-- ViewModel を DataContext に指定 -->

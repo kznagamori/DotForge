@@ -62,7 +62,7 @@ namespace DotForge.ViewModels
         private string selectedProjectFilePath = string.Empty;
 
         [ObservableProperty]
-        private ObservableCollection<string> projectFilePaths = new();
+        private ObservableCollection<string> projectFilePaths = new ObservableCollection<string> { string.Empty };
 
         // プロジェクト名
         [ObservableProperty]
@@ -341,6 +341,7 @@ namespace DotForge.ViewModels
                 StatusText = "出力先ディレクトリが無効です";
                 return;
             }
+            string ActualOutputDirectory = String.Empty;
             // 出力先ディレクトリが存在しない場合は作成
             if (!Directory.Exists(SelectedOutputDirectory))
             {
@@ -350,13 +351,17 @@ namespace DotForge.ViewModels
             // 出力先+プロジェクト名のディレクトリを作成
             if (IsCreateProjectDirectory)
             {
-            SelectedOutputDirectory = Path.Combine(SelectedOutputDirectory, ProjectName);
+                ActualOutputDirectory = Path.Combine(SelectedOutputDirectory, ProjectName);
             }
-            Directory.CreateDirectory(SelectedOutputDirectory);
+            else
+            {
+                ActualOutputDirectory = SelectedOutputDirectory;
+            }
+            Directory.CreateDirectory(ActualOutputDirectory);
             // 選択したテンプレートディレクトリを取得
             string templateDirectory = _SelectedItem.FullPath;
             // 出力先ディレクトリにテンプレートをコピー
-            var allFiles = Utilities.DirectoryCopier.CopyDirectory(templateDirectory, SelectedOutputDirectory, true);
+            var allFiles = Utilities.DirectoryCopier.CopyDirectory(templateDirectory, ActualOutputDirectory, true);
             List<string> newFileNameList = new();
             // 出力先ディレクトリをサブディレクトリを含めて再帰的に取得
             // ファイル名の一部にに___PROJECTNAME___が含まれるファイルを検索して置換
@@ -384,6 +389,10 @@ namespace DotForge.ViewModels
                     string newFilePath = Path.Combine(directory, newFileName);
 
                     // ファイルをリネーム
+                    if (File.Exists(newFilePath))
+                    {
+                        File.Delete(newFilePath);
+                    }
                     File.Move(filePath, newFilePath);
 
                     StatusText = $"リネーム: {filePath} -> {newFilePath}";
