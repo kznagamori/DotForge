@@ -235,6 +235,14 @@ namespace DotForge.ViewModels
             {
                 return;
             }
+            // 既に存在する場合は削除（重複回避のため）
+            if (ProjectFilePaths.Contains(newValue))
+            {
+                ProjectFilePaths.Remove(newValue);
+            }
+            // リストの先頭に挿入
+            ProjectFilePaths.Insert(0, newValue);
+
             SelectedProjectFilePath = newValue;
             // ProjectFilePathのベースファイル名を取得
             ProjectName = Path.GetFileNameWithoutExtension(SelectedProjectFilePath);
@@ -246,6 +254,13 @@ namespace DotForge.ViewModels
             {
                 return;
             }
+            // 既に存在する場合は削除（重複回避のため）
+            if (OutputDirectorys.Contains(newValue))
+            {
+                OutputDirectorys.Remove(newValue);
+            }
+            // リストの先頭に挿入
+            OutputDirectorys.Insert(0, newValue);
             SelectedOutputDirectory = newValue;
         }
 
@@ -262,8 +277,14 @@ namespace DotForge.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
+                // 既に存在する場合は削除（重複回避のため）
+                if (ProjectFilePaths.Contains(dialog.FileName))
+                {
+                    ProjectFilePaths.Remove(dialog.FileName);
+                }
+                 // リストの先頭に挿入
+                ProjectFilePaths.Insert(0, dialog.FileName);
                 SelectedProjectFilePath = dialog.FileName;
-                ProjectFilePaths.Add(SelectedProjectFilePath);
                 // ProjectFilePathのベースファイル名を取得
                 ProjectName = Path.GetFileNameWithoutExtension(SelectedProjectFilePath);
             }
@@ -290,8 +311,13 @@ namespace DotForge.ViewModels
                 }
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
+                    // 既に存在する場合は削除（重複回避のため）
+                    if (OutputDirectorys.Contains(dialog.FileName))
+                    {
+                        OutputDirectorys.Remove(dialog.FileName);
+                    }
+                    OutputDirectorys.Insert(0, dialog.FileName);
                     SelectedOutputDirectory = dialog.FileName;
-                    OutputDirectorys.Add(SelectedOutputDirectory);
                 }
             }
         }

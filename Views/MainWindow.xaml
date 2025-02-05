@@ -58,9 +58,9 @@
                     <MenuItem Header="終了" Click="ExitMenuItem_Click" />
                 </MenuItem>
             </Menu>
-            <Menu Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Height="48" Background="White">
+            <!--<Menu Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Height="48" Background="White">
                 <MenuItem Header="_ヘルプ" Click="HelpMenu_Click"/>
-            </Menu>
+            </Menu>-->
         </Grid>
 
         <!-- ステータスバー -->
@@ -131,7 +131,8 @@
                          Style="{StaticResource CommonComboBoxStyle}"
                          ItemsSource="{Binding ProjectFilePaths}"
                          SelectedItem="{Binding SelectedProjectFilePath, Mode=TwoWay}"
-                         IsEnabled="{Binding IsProjectFileRowEnabled}" />
+                         IsEnabled="{Binding IsProjectFileRowEnabled}" 
+                         IsEditable="True" />
 
                 <!-- ボタンは ButtonStyleを適用 -->
                 <Button DockPanel.Dock="Right"
@@ -221,7 +222,8 @@
                          Style="{StaticResource CommonComboBoxStyle}"
                          ItemsSource="{Binding OutputDirectorys, Mode=TwoWay}"
                          SelectedItem="{Binding SelectedOutputDirectory, Mode=TwoWay}"
-                         IsEnabled="{Binding IsOutputDirRowEnabled}" />
+                         IsEnabled="{Binding IsOutputDirRowEnabled}"
+                         IsEditable="True" />
 
                 <Button DockPanel.Dock="Right"
                         Style="{StaticResource CommonButtonStyle}"
