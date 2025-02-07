@@ -7,6 +7,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <ApplicationIcon>Assets/DotForge.ico</ApplicationIcon>
+        <!-- 各種バージョン情報の指定 -->
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <InformationalVersion>1.0.0</InformationalVersion>        
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
     <!-- ビルドの高速化 -->
