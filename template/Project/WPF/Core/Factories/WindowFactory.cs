@@ -3,7 +3,7 @@ using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ___PROJECTNAME___;
+namespace ___PROJECTNAME___.Core.Factory;
 public class WindowFactory : IWindowFactory
 {
     private readonly IServiceProvider _serviceProvider;

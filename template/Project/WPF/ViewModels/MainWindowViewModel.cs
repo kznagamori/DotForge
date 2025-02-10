@@ -6,11 +6,11 @@ namespace ___PROJECTNAME___.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly IWindowFactory? _windowFactory;
+    private readonly Core.Factory.IWindowFactory? _windowFactory;
     public MainWindowViewModel()
     {
     }
-    public MainWindowViewModel(IWindowFactory windowFactory)
+    public MainWindowViewModel(Core.Factory.IWindowFactory windowFactory)
     {
         _windowFactory = windowFactory;
     }

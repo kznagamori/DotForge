@@ -70,7 +70,7 @@ public partial class App : Application
     private void ConfigureServices(ServiceCollection services)
     {
         // ファクトリの登録
-        services.AddSingleton<IWindowFactory, WindowFactory>();
+        services.AddSingleton<Core.Factory.IWindowFactory, Core.Factory.WindowFactory>();
 
         // 各データサービスの登録
         // 設定サービスを登録
